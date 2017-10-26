@@ -1,0 +1,499 @@
+[
+{
+   "_id": "participant",
+   "schema": {
+      "companyName": {
+         "type": "String",
+         "label": "company_name",
+         "unique": true
+      },
+      "DBID": {
+         "type": "String",
+         "label": "dbid",
+         "optional":true
+      },
+      "customerId": {
+         "type": "String",
+         "label": "customer_id",
+         "optional": true
+      },
+      "address": {
+         "type": "addressSchema",
+         "label": "address"
+      }
+   },
+   "extendedSchema": {
+      "contact": {
+         "type": "contact",
+         "label": "Contact"
+      }
+   },
+   "signUpSchema": {},
+   "emails": {
+      "invites": {
+         "to": ["self","invitedBy"]
+      },
+      "companyAdded": {
+         "to": ["self"]
+      },
+      "reinvites": {
+         "to": ["self","user"]
+      }
+   },
+   "canInvite": ["bepi"],
+   "canEdit": ["bepi","participantAdmin","participant"],
+   "canClose": ["bepi"],
+   "canLink": ["bepi"],
+   "permissions": {
+      "branch": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      },
+      "supplier": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      },
+      "producer": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      }
+   },
+   "upstream": ["branch","supplier","producer"],
+   "downstream": [],
+   "subTypes": ["branch","supplier","producer"]
+},
+{
+   "_id": "branch",
+   "schema": {
+      "companyName": {
+         "type": "String",
+         "label": "company_name",
+         "unique": true
+      },
+      "DBID": {
+         "type": "String",
+         "label": "dbid",
+         "optional":true
+      },
+      "customerId": {
+         "type": "String",
+         "label": "customer_id",
+         "optional": true
+      },
+      "address": {
+         "type": "addressSchema",
+         "label": "address"
+      }
+   },
+   "extendedSchema": {
+      "contact": {
+         "type": "contact",
+         "label": "Contact"
+      }
+   },
+   "signUpSchema": {},
+   "emails": {
+      "invites": {
+         "to": ["self","invitedBy"]
+      },
+      "companyAdded": {
+         "to": ["self"]
+      },
+      "reinvites": {
+         "to": ["self","user"]
+      }
+   },
+   "canInvite": ["bepi","participant","branch"],
+   "canEdit": ["bepi","participant","participantAdmin","branch","branchAdmin"],
+   "canClose": ["bepi","participant","participantAdmin"],
+   "canLink": ["bepi","participant","participantAdmin"],
+   "permissions": {
+      "participant": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "branch": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         },
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "supplier": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      },
+      "producer": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      }
+   },
+   "upstream": ["branch","supplier","producer"],
+   "downstream": ["participant","branch"],
+   "subTypes": ["branch","supplier","producer"]
+},
+{
+   "_id": "supplier",
+   "schema": {
+      "companyName": {
+         "type": "String",
+         "label": "company_name",
+         "unique": true
+      },
+      "DBID": {
+         "type": "String",
+         "label": "dbid",
+         "optional":true
+      },
+      "customerId": {
+         "type": "String",
+         "label": "customer_id",
+         "optional": true
+      },
+      "address": {
+         "type": "addressSchema",
+         "label": "address"
+      }
+   },
+   "extendedSchema": {
+      "contact": {
+         "type": "contact",
+         "label": "Contact"
+      }
+   },
+   "signUpSchema": {},
+   "emails": {
+      "invites": {
+         "to": ["self","invitedBy"]
+      },
+      "companyAdded": {
+         "to": ["self"]
+      },
+      "reinvites": {
+         "to": ["self","user"]
+      }
+   },
+   "canInvite": ["bepi","participant","participantAdmin", "branch", "branchAdmin"],
+   "canEdit": ["bepi","participant","participantAdmin","branch","branchAdmin","supplierAdmin","supplier"],
+   "canClose": ["bepi"],
+   "canLink": ["bepi","participant","participantAdmin", "branch", "branchAdmin"],
+   "subTypes": ["producer"],
+   "permissions": {
+      "participant": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "branch": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "producer": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail": true
+         }
+      }
+   },
+   "upstream": ["producer"],
+   "downstream": ["participant","branch"]
+},
+{
+   "_id":"producer",
+   "schema": {
+      "companyName": {
+         "type": "String",
+         "label": "company_name",
+         "unique": true
+      },
+      "DBID": {
+         "type": "String",
+         "label": "dbid",
+         "optional":true
+      },
+      "customerId": {
+         "type": "String",
+         "label": "customer_id",
+         "optional": true
+      },
+      "address": {
+         "type": "addressSchema",
+         "label": "address"
+      }
+   },
+   "extendedSchema": {
+       "companyRelation": {
+         "label": "company_relation",
+         "type": "String",
+         "optional": true,
+         "allowedValues": ["downstream", "upstream"],
+         "autoform": {
+            "type": "select-radio",
+            "options": [
+               {
+                  "label": "company_relation_downstream",
+                  "value": "downstream "
+               },
+               {
+                  "label": "company_relation_upstream",
+                  "value": "upstream"
+               }
+            ]
+         }
+      },
+      "contact": {
+         "type": "contact",
+         "label": "Contact"
+      },
+      "language": {
+         "type": "String",
+         "label": "choose_invitation_email_language",
+         "allowedValues": ["en","zh","bn","tr","ta","hi"],
+         "optional": true,
+         "autoform": {
+            "type": "select-radio-inline",
+            "options": [
+               {
+                  "label": "en",
+                  "value": "en"
+               },
+               {
+                  "label": "zh",
+                  "value": "zh"
+               },
+               {
+                  "label": "bn",
+                  "value": "bn"
+               },
+               {
+                  "label": "hi",
+                  "value": "hi"
+               },
+               {
+                  "label": "tr",
+                  "value": "tr"
+               },
+               {
+                  "label": "ta",
+                  "value": "ta"
+               }
+            ]
+         }
+      }
+   },
+   "signUpSchema": {
+      "businessLicenseNumber": {
+         "type": "String",
+         "label": "business_license_number_(if",
+         "optional": true
+      },
+      "ownershipType": {
+         "type": "String",
+         "label": "ownership_type",
+         "allowedValues": ["joint_venture", "partnership", "corporation", "foreign_investment", "other"],
+         "autoform": {
+            "type": "select-radio-inline",
+            "options": [{
+               "label": "joint_venture",
+               "value": "joint_venture"
+            },
+            {
+               "label": "partnership",
+               "value": "partnership"
+            },
+            {
+               "label": "corporation",
+               "value": "corporation"
+            },
+            {
+               "label": "foreign_investment",
+               "value": "foreign_investment"
+            },
+            {
+               "label": "other",
+               "value": "other"
+            }]
+         }
+      },
+      "ownershipTypeOther": {
+         "type": "String",
+         "label": "define_other",
+         "optional": true,
+         "custom": "ownershipTypeOther"
+      },
+      "controllingShareholder": {
+         "type": "String",
+         "label": "is_there_a_controlling",
+         "allowedValues": ["yes", "no"],
+         "autoform": {
+            "type": "select-radio-inline",
+            "options": [{
+               "label": "yes",
+               "value": "yes"
+               }, {
+               "label": "no",
+               "value": "no"
+            }]
+         }
+      },
+      "yearCompanyFormed": {
+         "type": "Number",
+         "label": "year_company_formed",
+         "min": 1800,
+         "max": "today"
+      },
+      "otherCountriesPresence": {
+         "type": "String",
+         "label": "does_the_company_own",
+         "allowedValues": ["yes", "no"],
+         "autoform": {
+            "type": "select-radio-inline",
+            "options": [{
+               "label": "yes",
+               "value": "yes"
+            }, {
+               "label": "no",
+               "value": "no"
+            }]
+         }
+      },
+      "otherCountries": {
+         "type": ["String"],
+         "label": "present_in_following_countries",
+         "optional": true,
+         "custom": "otherCountries",
+         "autoform": {
+            "type": "select2",
+            "afFieldInput": {
+              "multiple": true
+            },
+            "options": [{"value": "AFG","label": "AFG"},{"value": "ALA","label": "ALA"}, {"value": "ALB","label": "ALB"},{"value": "DZA","label": "DZA"},{"value": "ASM","label": "ASM"},{"value": "AND","label": "AND"}, {"value": "AGO","label": "AGO"}, {"value": "AIA","label": "AIA"},{"value": "ATA","label": "ATA"},{"value": "ATG","label": "ATG"},{"value": "ARG","label": "ARG"},{"value": "ARM","label": "ARM"},{"value": "ABW","label": "ABW"},{"value": "AUS","label": "AUS"},{"value": "AUT","label": "AUT"},{"value": "AZE","label": "AZE"}, {"value": "BHS","label": "BHS"},{"value": "BHR","label": "BHR"},{"value": "BGD","label": "BGD"},{"value": "BRB","label": "BRB"},{"value": "BLR","label": "BLR"},{"value": "BEL","label": "BEL"},  {"value": "BLZ","label": "BLZ"},{"value": "BEN","label": "BEN"},{"value": "BMU","label": "BMU"},{"value": "BTN","label": "BTN"},{"value": "BOL","label": "BOL"},{"value": "BES","label": "BES"},{"value": "BIH","label": "BIH"}, {"value": "BWA","label": "BWA"}, {"value": "BVT","label": "BVT"},{"value": "BRA","label": "BRA"},{"value": "TOT","label": "TOT"},{"value": "VGB","label": "VGB"},{"value": "BRN","label": "BRN"},{"value": "BGR","label": "BGR"},{"value": "BFA","label": "BFA"},{"value": "BDI","label": "BDI"},{"value": "KHM","label": "KHM"},{"value": "CRM","label": "CRM"},{"value": "CAN","label": "CAN"},{"value": "CPV","label": "CPV"},{"value": "CYM","label": "CYM"},{"value": "CAF","label": "CAF"},{"value": "TCD","label": "TCD"},{"value": "CHL","label": "CHL"},{"value": "CHN","label": "CHN"},{"value": "CXR","label": "CXR"}, {"value": "CCK","label": "CCK"},{"value": "COL","label": "COL"}, {"value": "COM","label": "COM"}, 
+               {"value": "COK","label": "COK"},{"value": "CRI","label": "CRI"},{"value": "HRV","label":"HRV"},{"value": "CUB","label": "CUB"},{"value": "CUW","label": "CUW"},{"value": "CYP","label": "CYP"}, {"value": "CZE","label": "CZE"},{"value": "COD","label": "COD"}, 
+               {"value": "DNK","label": "DNK"},{"value": "DOM","label": "DOM"},{"value": "TLS","label": "TLS"},{"value": "ECU","label": "ECU"},{"value": "EGY","label": "EGY"},{"value": "SLV","label": "SLV"},{"value": "GNQ","label": "GNQ"}, {"value": "ERI","label": "ERI"}, {"value": "EST","label": "EST"},{"value": "ETH","label": "ETH"},{"value": "FLK","label": "FLK"},{"value": "FRO","label": "FRO"},{"value": "FJI","label": "FJI"},{"value": "FIN","label": "FIN"},{"value": "FRA","label": "FRA"},{"value": "GUF","label": "GUF"},{"value": "PYF","label": "PYF"},{"value": "ATF","label": "ATF"},{"value": "GAB","label": "GAB"},{"value": "GMB","label": "GMB"},{"value": "GEO","label": "GEO"},{"value": "DEU","label": "DEU"}, {"value": "GHA","label": "GHA"},{"value": "GIB","label": "GIB"}, {"value": "GRC","label": "GRC"},{"value": "GRL","label": "GRL"},{"value": "GRD","label": "GRD"},{"value": "GLP","label": "GLP"},{"value": "GUM","label": "GUM"},{"value": "GTM","label": "GTM"},{"value": "GGY","label": "GGY"},{"value": "GIN","label": "GIN"},{"value": "GNB","label": "GNB"},{"value": "GUY","label": "GUY"},{"value": "HTI","label": "HTI"},{"value": "HMD","label": "HMD"},{"value": "HND","label": "HND"},{"value": "HKG","label": "HKG"},{"value": "HUN","label": "HUN"},{"value": "ISL","label": "ISL"},{"value": "IND","label": "IND"}, {"value": "IDN","label": "IDN"},{"value": "IRN","label": "IRN"}, {"value": "IRQ","label": "IRQ"},{"value": "IRL","label": "IRL"},{"value": "IMN","label": "IMN"}, {"value": "ISR","label": "ISR"}, {"value": "ITA","label": "ITA"}, {"value": "JAM","label": "JAM"}, {"value": "JPN","label": "JPN"}, {"value": "JEY","label": "JEY"}, {"value": "JOR","label": "JOR"}, {"value": "KAZ","label": "KAZ"}, {"value": "KEN","label": "KEN"},{"value": "KIR","label": "KIR"},{"value": "KOR","label": "KOR"},{"value": "XKX","label": "XKX"},{"value": "KWT","label": "KWT"},{"value": "KGZ","label": "KGZ"},{"value": "LAO","label": "LAO"}, {"value": "LVA","label": "LVA"},{"value": "LBN","label": "LBN"},{"value": "LSO","label": "LSO"},{"value": "LBR","label": "LBR"}, {"value": "LBY","label": "LBY"}, {"value": "LIE","label": "LIE"},{"value": "LTU","label": "LTU"},{"value": "LUX","label": "LUX"}, {"value": "MAC","label": "MAC"},{"value": "MKD","label": "MKD"},{"value": "MDG","label": "MDG"}, {"value": "MWI","label": "MWI"},{"value": "MYS","label": "MYS"},{"value": "MDV","label": "MDV"},{"value": "MLI","label": "MLI"}, {"value": "MLT","label": "MLT"}, {"value": "MHL","label": "MHL"}, {"value": "MTQ","label": "MTQ"}, {"value": "MRT","label": "MRT"}, {"value": "MUS","label": "MUS"}, {"value": "MYT","label": "MYT"}, {"value": "FSM","label": "FSM"}, {"value": "MDA","label": "MDA"}, {"value": "MCO","label": "MCO"}, {"value": "MNG","label": "MNG"}, {"value": "MNE","label": "MNE"}, {"value": "MSR","label": "MSR"}, {"value": "MAR","label": "MAR"}, {"value": "MZ","label": "MZ"}, {"value": "MOZ","label": "MOZ"}, {"value": "MMR","label": "MMR"}, {"value": "NAM","label": "NAM"}, {"value": "NRU","label": "NRU"},  {"value": "NPL","label": "NPL"}, {"value": "NLD","label": "NLD"}, {"value": "NCL","label": "NCL"}, {"value": "NZL","label": "NZL"},{"value": "NIC","label": "NIC"},{"value": "NER","label": "NER"}, {"value": "NG","label": "NG"},{"value": "NGA","label": "NGA"}, {"value": "NIU","label": "NIU"}, {"value": "NFK","label": "NFK"}, {"value": "MNP","label": "MNP"}, {"value": "NOR","label": "NOR"}, {"value": "OMN","label": "OMN"}, {"value": "PAK","label": "PAK"}, {"value": "PLW","label": "PLW"}, {"value": "PSE","label": "PSE"}, {"value": "PAN","label": "PAN"}, {"value": "PNG","label": "PNG"}, {"value": "PRY","label": "PRY"}, {"value": "PRK","label": "PRK"}, {"value": "PER","label": "PER"}, {"value": "PHL","label": "PHL"}, {"value": "PCN","label": "PCN"}, {"value": "POL","label": "POL"}, {"value": "PRT","label": "PRT"}, {"value": "PRI","label": "PRI"}, {"value": "QAT","label": "QAT"}, {"value": "COG","label": "COG"}, {"value": "REU","label": "REU"}, {"value": "ROU","label": "ROU"}, {"value": "RUS","label": "RUS"}, {"value": "RWA","label": "RWA"}, {"value": "BLM","label": "BLM"}, {"value": "SHN","label": "SHN"}, {"value": "SKN","label": "SKN"}, {"value": "LCA","label": "LCA"}, {"value": "MAF","label": "MAF"}, {"value": "SPM","label": "SPM"}, {"value": "VCT","label": "VCT"}, {"value": "WSM","label": "WSM"}, {"value": "SMR","label": "SMR"}, {"value": "STP","label": "STP"}, {"value": "SAU","label": "SAU"}, {"value": "SEN","label": "SEN"}, {"value": "SRB","label": "SRB"}, {"value": "SYC","label": "SYC"}, {"value": "SLE","label": "SLE"}, {"value": "SGP","label": "SGP"}, {"value": "SXM","label": "SXM"}, {"value": "SVK","label": "SVK"}, {"value": "SVN","label": "SVN"}, {"value": "SLB","label": "SLB"}, {"value": "SOM","label": "SOM"}, {"value": "ZAF","label": "ZAF"}, {"value": "SGS","label": "SGS"}, {"value": "ESP","label": "ESP"}, {"value": "LKA","label": "LKA"}, {"value": "SDN","label": "SDN"}, {"value": "SUR","label": "SUR"}, {"value": "SJM","label": "SJM"}, {"value": "CH","label": "CH"}, {"value": "SWZ","label": "SWZ"}, {"value": "SWE","label": "SWE"}, {"value": "CHE","label": "CHE"}, {"value": "SYR","label": "SYR"}, {"value": "TWN","label": "TWN"},{"value": "TH","label": "TH"},{"value": "TJK","label": "TJK"}, {"value": "TZA","label": "TZA"}, {"value": "THA","label": "THA"}, {"value": "TGO","label": "TGO"}, {"value": "TKL","label": "TKL"}, {"value": "TON","label": "TON"}, {"value": "TTO","label": "TTO"}, {"value": "TUN","label": "TUN"}, {"value": "TUR","label": "TUR"}, {"value": "TKM","label": "TKM"}, {"value": "TCA","label": "TCA"}, {"value": "TUV","label": "TUV"}, {"value": "VIR","label": "VIR"}, {"value": "UGA","label": "UGA"}, {"value": "UKR","label": "UKR"}, {"value": "ARE","label": "ARE"}, {"value": "GBR","label": "GBR"}, {"value": "USA","label": "USA"}, {"value": "UMI","label": "UMI"}, {"value": "URY","label": "URY"}, {"value": "UZB","label": "UZB"}, {"value": "VUT","label": "VUT"}, {"value": "VAT","label": "VAT"}, {"value": "VEN","label": "VEN"}, {"value": "VNM","label": "VNM"}, {"value": "WLF","label": "WLF"}, {"value": "YEM","label": "YEM"}, {"value": "ESH","label": "ESH"}, {"value": "ZMB","label": "ZMB"}, {"value": "ZWE","label": "ZWE"}]
+         }
+      },
+      "annualTurnOver": {
+         "type": "String",
+         "label": "annual_turnover_of_company",
+         "allowedValues": ["<1 Million", "1<2 Million", "2<3 Million", ">3 Million"],
+         "min": 1,
+         "autoform": {
+            "type": "select-radio-inline",
+            "options": [{
+              "label": "<1_million",
+              "value": "<1 Million"
+            }, {
+              "label": "1-2_million",
+              "value": "1<2 Million"
+            }, {
+              "label": "2-3_million",
+              "value": "2<3 Million"
+            }, {
+              "label": ">3_million",
+              "value": ">3 Million"
+            }]
+         }
+      }
+   },
+   "emails": {
+      "invites": {
+         "to": ["self","invitedBy"]
+      },
+      "companyAdded": {
+         "to": ["self"]
+      },
+      "reinvites": {
+         "to": ["self","user"]
+      }
+   },
+   "canInvite": ["bepi","participant","participantAdmin","supplier","supplierAdmin","producer","producerAdmin","branch", "branchAdmin"],
+   "canEdit": ["bepi","participant","participantAdmin","branch","branchAdmin","supplierAdmin","supplier","producerAdmin","producer"],
+   "canClose": ["bepi"],
+   "canLink": ["bepi","participant","participantAdmin","supplier","supplierAdmin","producer","producerAdmin","branch", "branchAdmin"],
+   "subTypes": ["producer"],
+   "permissions": {
+      "participant": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "branch": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "supplier": {
+         "downstream": {
+            "query": true,
+            "link": true,
+            "delink": true
+         }
+      },
+      "producer": {
+         "upstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail" : true
+         },
+         "downstream": {
+            "query": true,
+            "invite": true,
+            "link": true,
+            "delink": true,
+            "detail" : true
+         }
+      }
+   },
+   "upstream": ["producer"],
+   "downstream": ["participant","branch","supplier","producer"]
+}
+]

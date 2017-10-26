@@ -1,0 +1,53 @@
+//*
+// Supply Chain Mapping page, which is also the 'company detail' page.
+//*
+
+
+template(name='supplychain')
+   +resendPendingInvitation
+   .panel.panel-default
+      .panel-heading
+         h4.clickable.collapse-companyDetail(href="#" data-toggle="collapse" data-parent="#companyDetail" data-target=".companyDetail")
+            +chevrons 'companyDetail'
+            | {{title}}
+      .panel-body.collapse.companyDetail
+         +with company
+            if canEdit
+               a#editCompanyProfile.btn.btn-success.btn-sm.pull-right(style="{{editVisible}}" href="{{pathFor 'company' query='edit=true'}}") {{translate 'edit'}}
+         +with detail
+            +companyProfileForm
+            
+   .panel.panel-default
+      .panel-heading
+         h4.clickable.collapse-supplychain(href="#" data-toggle="collapse" data-parent="#supplychain" data-target=".supplychain")
+            +chevrons 'supplychain'
+            | {{translate 'Supply_chain'}}
+      .panel-body.collapse.supplychain
+         each lists
+            +supplychain_list
+
+template(name='resendPendingInvitation')
+   if isPending
+      .panel.panel-warning
+         .panel-heading
+               p {{info}}.
+               +resendInvite
+
+template(name="supplychain_list")
+   // only show list if results
+   if hasResults
+      div(class="{{template}}")
+         h4.capitalize-letter {{translate title}}
+         +with data
+            if showPager
+               +companies_pager
+            .supplychain_listing
+               each companies
+                  +Template.dynamic template=rowTemplate
+
+template(name="supplychain_row")
+   if isStrictUpstreamOrOwn
+      a(href="{{pathFor 'supplychain'}}") {{details.companyName}}
+   else
+      | {{details.companyName}}
+   br

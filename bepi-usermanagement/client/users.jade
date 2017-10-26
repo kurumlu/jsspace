@@ -1,0 +1,242 @@
+template(name="usermanagement")
+   .row
+      .col-md-10
+         h3 {{translate 'user_management'}}
+   .row
+      .col-md-4
+         +userTypeSelection
+         br
+   .row
+      .col-md-12
+         unless isBepi
+            if isCompany
+               +userSearchTable(role="company")
+            else
+               +userSearchTable(role="contractor")
+   .row
+      .col-md-16
+         if isInRole 'bepi'
+            if isBepi
+               +bepiUsers
+            if isContractor
+               +contractorUsers
+            if isCompany
+               +companyUsers
+         if isInRole 'producerAdmin, participantAdmin, supplierAdmin, branchAdmin'
+            +companyUsers 
+         if isInRole 'consultantContact, assessorContact, chemicalauditorContact, testlabContact'
+            +contractorUsers
+
+template(name="userTypeSelection")
+   if isInRole 'bepi'
+      select.form-control.btn-success#userTypeSelection
+         option(value="default") {{translate 'please_specify_user_type'}}
+         +each userType
+            option(value="#{this}") {{translate this}}
+
+template(name="userSearchTable")
+   label Search Users
+   table.table.table-hover#companySearch
+      tbody
+         tr
+            td
+               a(href='#') 
+                  input.form-control(type="text" placeholder="{{translate 'company_name'}}" id="#{role}_searchBy_CompanyName")
+            td
+               a(href='#') 
+                  input.form-control(type="text" placeholder="{{translate 'contact_name'}}" id="#{role}_searchBy_Name")
+            td
+               a(href='#') 
+                  input.form-control.searchByEmail(type="text" placeholder="{{translate 'contact_email'}}" id="#{role}_searchBy_Email")
+
+template(name="bepiUsers")
+   .container-fluid
+      h3 {{translate 'bepi'}} {{translate 'users'}}:
+      hr
+      br
+      br
+      if show
+           p Showing {{showing}} of {{totalNbr}}
+              button.btn.btn-default#show_more {{translate 'show_more'}}
+              button.btn.btn-default#show_all {{translate 'show_all'}}
+      table.table.table-bordered.table-striped.table-hover
+         thead
+            tr
+               th
+                  button.addBepiUser.btn.btn-default.btn-xs(type='button', title="{{translate 'Add_User'}}")
+                        span.glyphicon.glyphicon-plus
+                        span {{translate 'Add_User'}} 
+               th {{translate 'name'}}
+                  br
+                  a(href='#') 
+                     span.glyphicon.glyphicon-search
+                        span.caret 
+                     input.form-control#bepi_searchBy_Name(type="text" placeholder="")
+               th {{translate 'email'}}
+                  br
+                  a(href='#') 
+                     span.glyphicon.glyphicon-search
+                        span.caret 
+                     input.form-control#bepi_searchBy_Email(type="text" placeholder="")
+               th {{translate 'roles'}}
+         tbody
+            +each users
+               +bepiUsersRow(data=this)
+
+template(name="bepiUsersRow")
+   tr
+      td
+         +addGlyphicons
+      td {{data.profile.name}}
+      td
+         +each data.emails
+            {{address}}
+      td 
+         +each data.roles
+            {{this}} 
+
+
+template(name="contractorUsers")
+   .container-fluid
+      h3  {{translate 'contractor'}}  {{translate 'users'}}:
+      if warning
+         p(style="color:grey;font-style:italic;")  {{translate 'for_adding_a_new_contractor'}} 
+      hr
+      br
+      if consultantUsers
+         +tableWrapper(role="consultant" label="consultant" isContractor=true isBtnVisible=false ) 
+            +each consultantUsers
+               +userrows(role="consultant" data=this) 
+         br
+      if assessorUsers
+         +tableWrapper(role="assessor" label="assessor" isContractor=true isBtnVisible=false )
+            +each assessorUsers
+               +userrows(role="assessor" data=this) 
+         br
+      if chemicalauditorUsers
+         +tableWrapper(role="chemicalauditor" label="chemicalauditor" isContractor=true isBtnVisible=false )
+            +each chemicalauditorUsers
+               +userrows(role="chemicalauditor" data=this)
+         br
+      if testlabUsers
+         +tableWrapper(role="testlab" label="testlab" isContractor=true isBtnVisible=false )
+            +each testlabUsers
+               +userrows(role="testlab" data=this)
+         br
+
+
+template(name="tableWrapper")
+   h4 {{translate this.label}} {{translate 'users'}}:
+   p Showing {{showing}} of {{totalNbr}}
+      button.btn.btn-default#show_more {{translate 'show_more'}}
+      button.btn.btn-default#show_all {{translate 'show_all'}}
+   table.table.table-bordered.table-striped.table-hover
+      thead
+         tr
+            th
+               if isBtnVisible
+                  button.addUser.btn.btn-default.btn-xs(type='button', title="{{translate 'Add_User'}}")
+                        span.glyphicon.glyphicon-plus
+                        span {{translate 'Add_User'}} 
+            if isContractor
+               th {{translate 'links'}}            
+            th {{translate 'company_name'}}
+            th {{translate 'name'}}
+            th {{translate 'email'}}
+            th {{translate 'roles'}} 
+            if isContractor
+               th {{translate 'assigned_sites'}}
+      tbody
+         {{> UI.contentBlock}}
+
+template(name="addGlyphicons")
+   a.btn.btn-default.btn-xs(href="{{pathFor 'user' data=this.data query='view=true'}}" title="{{translate 'view'}}")
+      span.viewIcon.glyphicon.glyphicon-zoom-in
+   unless isInRole 'consultantContact, assessorContact, chemicalauditorContact, testlabContact' 
+      a.editUserToCompany.btn.btn-default.btn-xs(type="button", title="{{translate 'edit'}}", href="{{pathFor 'user' data=this.data  query='edit=true'}}")
+         span.editIcon.glyphicon.glyphicon-pencil
+      a.removeUser.btn.btn-default.btn-xs(href='#' data=this.data  title='Delete')
+         span.deleteIcon.glyphicon.glyphicon-remove
+
+template(name="companyUsers")
+   .container-fluid
+      h3  {{translate 'company'}}   {{translate 'users'}}:
+      hr
+      br
+      if participantUsers
+         +tableWrapper(role="participant" label="participant" isContractor=false isBtnVisible=true )
+            +each participantUsersOfParticipant
+               +userrows(data=this branchOfParticipant=false)
+         unless isInRole 'bepi'
+            +tableWrapper(role="branch" label="branch" isContractor=false isBtnVisible=false )
+               +each branchUsersOfParticipant
+                  +userrows(data=this branchOfParticipant=true)
+         br
+      if branchUsers
+         +tableWrapper(role="branch" label="branch" isContractor=false isBtnVisible=true )
+            +each branchUsers
+               +userrows(data=this branchOfParticipant=false)
+         br
+      if supplierUsers
+         +tableWrapper(role="supplier" label="supplier" isContractor=false isBtnVisible=true )
+            +each supplierUsers
+               +userrows(data=this branchOfParticipant=false)
+         br
+      if producerUsers
+         +tableWrapper(role="producer" label="producer" isContractor=false isBtnVisible=true )
+            +each producerUsers
+               +userrows(data=this branchOfParticipant=false)
+         br
+
+template(name="linkGlyphicon")
+   if isContractorContact
+      //a.btn.btn-default.btn-xs(href="{{pathFor 'contractorLinks' data=this.data query='type={{this.role}}' }}" title='Show contractors links')
+      a.btn.btn-default.btn-xs(href="{{pathFor 'contractorLinks' data=this.data }}" title='Show contractors links')
+         span.viewIcon.glyphicon.glyphicon-link
+
+template(name="userrows")
+   tr
+      td 
+         if branchOfParticipant
+            //a.btn.btn-default.btn-xs(href="{{pathFor 'user' data=this.data query='view=true'}}" title="{{translate 'view'}}")
+               span.viewIcon.glyphicon.glyphicon-zoom-in
+         else
+            +addGlyphicons
+      if isContractor
+         td
+            +linkGlyphicon
+      td {{data.profile.companyName}}
+      td {{data.profile.name}}
+      td
+         +each data.emails
+            {{address}}
+      td 
+         +each data.roles
+            {{this}} 
+      if isContractor 
+         td
+            +each contractorSites 
+               {{siteName}}
+               //only Bepi can assign a contractor
+               //if user.isBepi
+                  if hasContact
+                     a.assignContractor.btn.btn-default.btn-xs(type="button", title="{{translate 'change_contractors_assignment'}}", href="{{pathFor 'assignNewContractor' query='contractor={{data.profile.companyName}}' query=queryString}}")
+                           span.editIcon.glyphicon.glyphicon-erase
+               br
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+

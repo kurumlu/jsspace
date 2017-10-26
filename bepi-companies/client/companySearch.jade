@@ -1,0 +1,24 @@
+template(name="companySearch")
+   table.table.table-hover#companySearch
+    caption
+      label {{translate 'search_companies'}}
+    tbody
+      tr
+        td
+           input#details_DBID.form-control(type="text" placeholder="{{translate 'dbid'}}" size="7")
+        td
+           input#details_companyName.form-control(type="text" placeholder="{{translate 'company_name'}}")
+        td
+           select#details_address_country.form-control(placeholder="Country")
+              option(value="")
+              +each countries
+                 option(value="{{value}}") {{label}}
+        td
+           input#details_contact_name.form-control(type="text" placeholder="{{translate 'Contact'}}")
+        td
+           input#details_contact_email.form-control(type="text" placeholder="{{translate 'contact_email'}}")
+        td
+           button#clear_search.btn.btn-default.btn-xs
+              span.glyphicon.glyphicon-remove
+   if isSearching
+      +searching

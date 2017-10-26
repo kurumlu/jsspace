@@ -1,0 +1,278 @@
+template(name="dormants")
+   .row
+      .col-md-10
+         h1 {{translate 'value_chain_management'}}
+         br
+         br
+   .row
+      .col-md-2
+   .row
+      .col-md-4
+         br
+         h4{{title}}
+   .row
+      .col-md-2
+   .row
+      .col-md-16
+         br
+         h4(style="color:red;") {{warning}}
+         +dormantsTableWrapper
+            +each dormants
+               +dormantrows
+
+template(name="selectorRow")
+   tr
+      td
+         p(style="color:red;"){{selector.DBID}}
+      td
+         p(style="color:red;")
+            each entityType
+               {{this}} 
+      td
+         p(style="color:red;"){{selector.EntityName.$regex}}
+      td
+         p(style="color:red;")
+            each countries
+               {{this}} 
+      td
+         //empty address cell
+      td
+         //empty contact name cell
+      td
+         //empty contact email cell
+      td.hideable(style="{{isExtendedTable}}")
+         br
+         p(style="color:red;")
+            each selector.Sector.$in
+               {{this}}
+      td.hideable(style="{{isExtendedTable}}")
+         //empty Product Group cell
+      td.hideable(style="{{isExtendedTable}}")
+         //empty Industry type cell
+      td.hideable(style="{{isExtendedTable}}")
+         //empty Product type cell
+      td.hideable(style="{{isExtendedTable}}")
+         //empty audit type cell
+      td.hideable(style="{{isExtendedTable}}")
+         //empty audit date cell
+      td.hideable(style="{{isExtendedTable}}")
+         //empty audit expiry date
+      td.hideable(style="{{isExtendedTable}}")
+         //empty overall score cell
+      td.hideable(style="{{isExtendedTable}}")
+         br
+         p(style="color:red;")
+            each selector.EnvironmentalScore.$in
+               {{this}} 
+      td.hideable(style="{{isExtendedTable}}")
+         br
+         p(style="color:red;")
+            each selector.LegalScore.$in
+               {{this}} 
+      td.hideable(style="{{isExtendedTable}}")
+         br
+         p(style="color:red;")
+            each selector.WaterScore.$in
+               {{this}} 
+      td.hideable(style="{{isExtendedTable}}") 
+         br
+         p(style="color:red;")
+            each selector.WasteScore.$in
+               {{this}} 
+      td.hideable(style="{{isExtendedTable}}") 
+         br
+         p(style="color:red;")
+            each selector.ChemicalScore.$in
+               {{this}} 
+      td.hideable(style="{{isExtendedTable}}") 
+         br
+         p(style="color:red;"){{selector.SocialAuditNames.$regex}}
+      td.hideable(style="{{isExtendedTable}}")
+         //empty Linked Companies cell
+      td
+         a.columnController(href="#") 
+            span.glyphicon.glyphicon-option-horizontal
+      td
+         button.btn.btn-primary#resetSelector {{translate 'reset'}}
+
+template(name="dormantsTableWrapper")
+   .container-fluid
+      table.table.table-bordered.table-striped.table-hover
+         thead
+            tr
+               th(style="vertical-align:top;") DBID    
+                  br
+                  input.form-control#searchDBID(type="text" placeholder="")
+               th(style="vertical-align:top;") {{translate 'Company_Type'}}
+                  br
+                  +CompanyTypeSelector      
+               th(style="vertical-align:top;") {{translate 'company_name'}}
+                  br
+                  input.form-control#searchEntityName(type="text" placeholder="")
+                  p(style="color:red;"){{entityType}}
+               th(style="vertical-align:top;") {{translate 'country'}}
+                  br
+                  +CountrySelector
+               th(style="vertical-align:top;") {{translate 'address'}}
+               th(style="vertical-align:top;") {{translate 'contact_name'}}
+               th(style="vertical-align:top;") {{translate 'contact_email'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Sector'}}
+                  br
+                  +SectorSelector
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'ProductGroup'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'IndustryType'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'ProductType'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Audit_type'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Audit_date'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Audit_expiry_date'}}
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Overall_score'}} 
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Overall_Env_score'}}
+                  br 
+                  +OverallEnvScoreSelector 
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Legal_score'}}
+                  br
+                  +LegalScoreSelector 
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Water_score'}}
+                  br
+                  +WaterScoreSelector 
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Waste_score'}}
+                  br 
+                  +WasteScoreSelector 
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Chemical_score'}}
+                  br 
+                  +ChemicalScoreSelector
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Certificates'}}
+                  br
+                  a(href='#') 
+                     span.glyphicon.glyphicon-search
+                        span.caret 
+                  input.form-control#searchSocialAuditNames(type="text" placeholder="")
+               th.hideable(style="vertical-align:top;{{isExtendedTable}}") {{translate 'Linked_Companies'}}
+               th
+                  //a.columnController3(href="#") 
+                     span.glyphicon.glyphicon-option-horizontal
+               th
+         tbody
+            +selectorRow
+            {{> UI.contentBlock}}
+
+template(name="dormantrows")
+   tr
+      if isSupplier
+         td {{DBID}}S
+      else
+         td {{DBID}}
+      td {{translate companyType}}
+      td {{EntityName}}
+      td {{translate Country}}
+      td {{Address1}} {{Zip}} {{State}} {{City}}
+      td {{ContactName}}
+      td {{ContactEmail}}
+      td.hideable(style="{{isExtendedTable}}") {{Sector}}
+      td.hideable(style="{{isExtendedTable}}") {{ProductGroup}}
+      td.hideable(style="{{isExtendedTable}}") {{IndustryType}}
+      td.hideable(style="{{isExtendedTable}}") {{ProductType}}
+      td.hideable(style="{{isExtendedTable}}") {{AuditType}}
+      td.hideable(style="{{isExtendedTable}}") {{LastAuditDate}}
+      td.hideable(style="{{isExtendedTable}}") {{LastAuditExpiryDate}}
+      td.hideable(style="color:#{scoreColorOverallRating};{{isExtendedTable}}") {{overallScoreContent}}
+      td.hideable(style="color:#{scoreColorEnvironmentalScore};{{isExtendedTable}}") {{EnvironmentalScore}}
+      td.hideable(style="color:#{scoreColorLegalScore};{{isExtendedTable}}") {{LegalScore}}
+      td.hideable(style="color:#{scoreColorWaterScore};{{isExtendedTable}}") {{WaterScore}}
+      td.hideable(style="color:#{scoreColorWasteScore};{{isExtendedTable}}") {{WasteScore}}
+      td.hideable(style="color:#{scoreColorChemicalScore};{{isExtendedTable}}") {{ChemicalScore}} 
+      td.hideable(style="{{isExtendedTable}}")
+         +each Certificates
+            {{name}},{{date}} - 
+      th.hideable(style="{{isExtendedTable}}") {{LinkedParticipants}}
+      th
+         a.columnController(href="#") 
+            span.glyphicon.glyphicon-option-horizontal
+      unless activeInBepi
+         td 
+            button.activateDormant.btn.btn-success.btn-xs(type='button', title="activate dormant") {{translate 'Activate'}}
+      else
+         td
+            p {{translate 'Activated'}}
+
+template(name="SectorSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.searchSector(href='#' id="{{this}}") {{this}}
+
+template(name="OverallEnvScoreSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.searchOverallEnvScoreSelector(href='#' id="{{this}}") {{this}}
+
+
+template(name="LegalScoreSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.LegalScoreSelector(href='#' id="{{this}}") {{this}}
+
+template(name="WaterScoreSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.WaterScoreSelector(href='#' id="{{this}}") {{this}}
+
+template(name="WasteScoreSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.WasteScoreSelector(href='#' id="{{this}}") {{this}}
+
+template(name="ChemicalScoreSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.ChemicalScoreSelector(href='#' id="{{this}}") {{this}}
+
+template(name="CountrySelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.CountrySelector(href='#' id="{{this.code}}") {{this.name}}
+
+template(name="CompanyTypeSelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.CompanyTypeSelector(href='#' id="{{code}}") {{name}}
+

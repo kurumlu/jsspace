@@ -1,0 +1,35 @@
+template(name="user")
+   h3 {{translate title}} {{translate title2}} {{translate 'user'}}
+   if view 
+      br
+      unless isInRole 'consultantContact, assessorContact, chemicalauditorContact, testlabContact'
+         a#editCompanyProfile.btn.btn-success.btn-sm(style="{{editVisible}}" href="/user/{{userId}}?edit=true") {{translate 'edit'}}
+      br
+      br
+      .form-group
+         label {{translate 'name'}}
+         p {{name}}
+      .form-group
+         label {{translate 'email'}}
+         p {{email}}
+      unless isBepi
+         .form-group
+            label {{translate 'Role'}}
+            p {{roles}}
+         .form-group
+            label {{translate 'company_name'}}
+            p {{companyName}}
+   else
+      +userProfileForm
+
+template(name="userProfileForm")
+   +autoForm id="usersForm" schema=schema type=insertType doc=this
+      | {{> afQuickFields class="form-control"}}
+      div
+         button.btn.btn-primary(type='submit') {{translate 'submit'}}
+
+
+
+
+      
+

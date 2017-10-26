@@ -1,0 +1,318 @@
+[
+{
+    "_id":"company",
+    "en":"Company",
+    "zh":"公司",
+    "bn":"কোম্পানি"
+},
+{
+   "_id": "producers",
+   "en": "producers",
+   "zh": "producers",
+   "bn":"উৎপাদনকারীরা"
+},
+{
+   "_id": "participants",
+   "en": "participants",
+   "zh":"Participants",
+   "bn":"অংশগ্রহণকারীরা"
+},
+{
+   "_id": "suppliers",
+   "en": "suppliers",
+   "zh": "suppliers",
+   "bn":"সরবরাহকারীরা"
+},
+{
+   "_id": "producer",
+   "en": "producer",
+   "zh": "producer",
+   "bn":"উৎপাদক"
+},
+{
+   "_id": "participant",
+   "en": "participant",
+   "zh":"participant",
+   "bn":"অংশগ্রহণকারী"
+},
+{
+   "_id": "supplier",
+   "en": "supplier",
+   "zh": "supplier",
+   "bn":"সরবরাহকারী"
+},
+{
+    "_id":"welcome_to_bepi",
+    "en":"Welcome to BEPI",
+    "zh":"欢迎加入商界环境绩效倡议（BEPI)",
+    "bn":"BEPI-তে স্বাগত"
+},
+{
+   "_id": "invite_company",
+   "en": "Invite company to BEPI program",
+   "zh":"Invite company to BEPI program",
+   "bn":"কোম্পানিকে BEPI কর্মসূচিতে আমন্ত্রণ জানান"
+},
+{
+   "_id":"invitation_revoked",
+   "en":"<h1>This invitation does not exist</h1><h2>It has been revoked by the requester,</br>it has already been accepted / rejected and purged from the database<br/>or it has a wrong identifier.</h2><strong>(This invitation key is no longer useable)</strong>",
+   "zh":"<h1>This invitation does not exist</h1><h2>It has been revoked by the requester,</br>it has already been accepted / rejected and purged from the database<br/>or it has a wrong identifier.</h2><strong>(This invitation key is no longer useable)</strong>",
+   "bn":"<h1>এই আমন্ত্রণটির অস্তিত্ব নেই</h1><h2>এটি অনুরোধকারী কর্তৃক প্রত্যাহার করে নেওয়া হয়েছে,</br>এটি ইতিমধ্যেই গ্রহণ / প্রত্যাখ্যান করা হয়েছে এবং ডেটাবেস থেকে বের করে দেওয়া হয়েছে<br/>অথবা এটি একটি ভুল শনাক্তকারী।</h2><strong>(এই আমন্ত্রণ চাবিটি আর ব্যবহারযোগ্য নয়)</strong>"
+},
+{
+   "_id":"welcome_to_bepi",
+   "en":"Welcome to BEPI"
+},
+{
+    "_id": "invitation_introduction",
+    "en":"You have been invited by $$ to join BEPI.\n\n You are just a few clicks away from being registered on the BEPI Platform.\n\n Please click on ‘Accept BEPI participation’ and complete your company profile.\n\n Thank you.",
+    "zh":"$$已邀请您加入BEPI\n\n 你只需点击几下就能注册到BEPI平台\n\n 请点击“注册BEPI”并完成公司信息\n\n 谢谢",
+    "bn":"আপনাকে BEPI তে যোগদানের জন্য $$ দ্বারা আমন্ত্রণ জানানো হয়েছে. আপনি BEPI প্ল্যাটফর্মে নিবন্ধিত হওয়া থেকে মাত্র কয়েক ক্লিক দূরে. উপর 'BEPI জন্য সাইন আপ করুন' এবং আপনার কোম্পানীর প্রোফাইল সম্পন্ন করুন. ধন্যবাদ."
+},
+{
+   "_id":"invitation_accepted",
+   "en":"This invitation has been successfully accepted. An email has been sent to the known email address which will allow the user to set up a password and log in to the platform. You may now close this screen.",
+   "zh":"谢谢！您现在可以关闭此视窗。\n 电子邮件已经发送到您的电子邮箱，将让您可以设置密码，并登录到平台。",
+   "bn":"আমন্ত্রণটি সফলভাবে গৃহীত হয়েছে। জানা ইমেইল ঠিকানায় একটি ইমেইল পাঠানো হয়েছে যেটি ব্যবহারকারীকে একটি পাসওয়ার্ড নির্ধারণ এবং প্ল্যাটফর্মে লগ ইন করার সুযোগ দেবে।"
+},
+{
+   "_id":"invitation_resend_enrollment",
+   "en":"Resend enrollment email",
+   "zh":"Resend enrollment email",
+   "bn":"নথিভুক্তিকরণ ইমেইল আবার পাঠান"
+},
+{
+   "_id":"invitation_rejected",
+   "en":"This invitation has been rejected. (This invitation is no longer useable)",
+   "zh":"This invitation has been rejected. (This invitation is no longer useable)",
+   "bn":"এই আমন্ত্রণটি প্রত্যাখ্যান করা হয়েছে। (এই আমন্ত্রণ আর ব্যবহারযোগ্য নয়)"
+},
+{
+   "_id":"invitation_closed",
+   "en":"This company has been closed and is not active anymore.",
+   "zh":"This company has been closed and is not active anymore.",
+   "bn":"এই কোম্পানিটি বন্ধ হয়ে গেছে এবং আর সক্রিয় নয়।"
+},
+{
+   "_id":"invitation_error",
+   "en":"Something went wrong. This company has an error.",
+   "zh":"Something went wrong. This company has an error.",
+   "bn":"কিছু ভুল হয়েছে। এই কোম্পানির একটি ত্রুটি আছে।"
+},
+{
+   "_id":"accept_invitation_button",
+   "en":"Accept BEPI participation",
+   "zh":"Accept BEPI participation",
+   "bn":"BEPI অংশগ্রহণ গ্রহণ করুন"
+},
+{
+   "_id":"reject_invitation_button",
+   "en":"Reject BEPI participation",
+   "zh":"Reject BEPI participation",
+   "bn":"BEPI অংশগ্রহণ প্রত্যাখ্যান করুন"
+},
+{
+   "_id":"rejection_message",
+   "en":"Please tell us why you reject BEPI participation",
+   "zh":"Please tell us why you reject BEPI participation",
+   "bn":"অনুগ্রহ করে আমাদের বলুন আপনি কেন BEPI  অংশগ্রহণ প্রত্যাখ্যান করেছেন"
+  },
+{
+   "_id":"you_are_invited_by",
+   "en":"You are invited by",
+   "zh":"You are invited by",
+   "bn":"আপনি   -এর দ্বারা আমন্ত্রিত"
+},
+{
+   "_id":"please_verify_your_company",
+   "en":"Please verify your company profile",
+   "zh":"Please verify your company profile",
+   "bn":"অনুগ্রহ করে আপনার কোম্পানি প্রোফাইল যাচাই করুন"
+},
+{
+   "_id":"choose_invitation_email_language",
+   "en":"Choose invitation email language",
+   "zh":"Choose invitation email language",
+   "bn":"আমন্ত্রণ ইমেইল ভাষা নির্বাচন করুন"
+},
+{
+   "_id":"please_use_invitation_link",
+   "en":"Please use the link received in the invitation email to activate this company profile",
+   "zh":"Please use the link received in the invitation email to activate this company profile",
+   "bn":"এই কোম্পানি প্রোফাইল সক্রিয় করতে অনুগ্রহ করে আমন্ত্রণ ইমেইলে প্রাপ্ত লিঙ্কটি ব্যবহার করুন"
+},
+{
+   "_id":"resend_activation_email",
+   "en":"Resend activation email.",
+   "zh":"Resend activation email.",
+   "bn":"সক্রিয়করণ ইমেইল আবার পাঠান।"
+},
+{
+   "_id":"delete_invitation_confirmation",
+   "en":"Are you sure you want to delete this invitation?",
+   "zh":"Are you sure you want to delete this invitation?",
+   "bn":"আপনি কি নিশ্চিত আপনি এই আমন্ত্রণটি মুছে দিতে চান?"
+},
+{
+   "_id":"link_participant",
+   "en": "Link to participant"
+},
+{
+   "_id":"link_supplier",
+   "en":"Link to supplier"
+},
+{
+   "_id":"link_producer",
+   "en":"Link to downstream producer"
+},
+{
+   "_id":"link_upstream_producer",
+   "en":"Link to upstream producer"
+},
+{
+   "_id":"upstreams",
+   "en":"upstream producers",
+   "zh":"upstream producers",
+   "bn":"আপস্ট্রিম উৎপাদনকারীরা"
+},
+{
+   "_id":"downstreams",
+   "en":"downstream producers",
+   "zh":"downstream producers",
+   "bn":"ডাউনস্ট্রিম সরবরাহকারীরা"
+},
+{
+   "_id":"company_address",
+   "en":"Company Address",
+   "zh":"公司地址",
+   "bn":"কোম্পানির  ঠিকানা"
+},
+{
+   "_id":"contact_name",
+   "en":"Contact Name",
+   "zh":"联系人姓名",
+   "bn":"যোগাযোগের ব্যক্তির নাম"
+},
+{
+    "_id":"contact_email",
+    "en":"Contact Email",
+    "zh":"联系人电子邮箱",
+    "bn":"যোগাযোগের ব্যক্তির ইমেইল"
+},
+{
+   "_id":"this_page_allows_you_to_manage",
+   "en":"This page allows you to manage your own supply chain. Please click here for more information:",
+   "zh":"This page allows you to manage your own supply chain. Please click here for more information:",
+   "bn":"এই পাতাটি আপনার নিজস্ব সরবরাহ শৃঙ্খল ব্যবস্থাপনা করার সুযোগ দেয়। আরও তথ্যের জন্য অনুগ্রহ করে এখানে ক্লিক করুন:"
+},
+{
+   "_id":"producers_in_your_supplychain",
+   "en":"Producers in your supply chain can be:",
+   "zh":"Producers in your supply chain can be:",
+   "bn":"আপনার সরবরাহ শৃঙ্খলে উৎপাদনকারীরা হতে পারেন:"
+},
+{
+   "_id":"upstream_producer",
+   "en":"Producer who sells or sends you raw materials, processed raw materials, parts or semi-finished goods (upstream producer)",
+   "zh":"Producer who sells or sends you raw materials, processed raw materials, parts or semi-finished goods (upstream producer)",
+   "bn":"যে উৎপাদনকারী আপনাকে কাঁচামাল, প্রক্রিয়াকৃত কাঁচামাল, অংশ বা অর্ধ-সমাপ্ত মাল বিক্রয় করেন বা পাঠান (আপস্ট্রিম উৎপাদনকারী)"
+
+},
+{
+   "_id":"downstream_producer",
+   "en":"Producer who buys or receives raw materials, processed raw materials, parts or semi-finished goods from you (downstream producer)",
+   "zh":"Producer who buys or receives raw materials, processed raw materials, parts or semi-finished goods from you (downstream producer)",
+   "bn":"যে উৎপাদনকারী আপনার কাছে কাঁচামাল, প্রক্রিয়াকৃত কাঁচামাল, অংশ বা অর্ধ-সমাপ্ত মাল ক্রয় করেন বা গ্রহণ করেন (ডাউনস্ট্রিম উৎপাদনকারী)"
+},
+{
+   "_id":"producer_who_performs_part_of_the_order",
+   "en":"Producer who performs part of the order you hold with your customer (downstream producer)",
+   "zh":"Producer who performs part of the order you hold with your customer (downstream producer)",
+   "bn":"যে উৎপাদনকারী আপনার ক্রেতার কাছে নেওয়া অর্ডারের কিছু অংশ প্রদানে ভূমিকা নেন (ডাউনস্ট্রিম উৎপাদনকারী)"
+},
+{
+   "_id":"to_invite_one_of_your_producers",
+   "en":"To invite one of your producers, click on the image plus sign below.",
+   "zh":"To invite one of your producers, click on the image plus sign below.",
+   "bn":"আপনার উৎপাদনকারীদের একজনকে আমন্ত্রণ করতে, নিচের যোগ চিহ্নে ছবিতে ক্লিক করুন।"
+},
+{
+   "_id":"please_make_sure_to_have",
+   "en":"Please make sure to have the following ready:",
+   "zh":"Please make sure to have the following ready:",
+   "bn":"অনুগ্রহ করে নিশ্চিত করুন যে নিম্নোক্তগুলি প্রস্তুত আছে:"
+},
+{
+   "_id":"after_inviting_a_producer",
+   "en":"After inviting a producer, please link them to the correct participant (customer).",
+   "zh":"After inviting a producer, please link them to the correct participant (customer).",
+   "bn":"একজন উৎপাদককে আমন্ত্রণ করার পরে, অনুগ্রহ করে তাঁকে সঠিক অংশগ্রহণকারীর (ক্রেতা) সঙ্গে যুক্ত করে দিন।"
+},
+{
+   "_id":"company_relation_downstream",
+   "en":"downstream (Producer who buys or receives raw materials, processed raw materials, parts or semi-finished goods from you OR Producer who performs part of the order you hold with your customer)",
+   "zh":"downstream (Producer who buys or receives raw materials, processed raw materials, parts or semi-finished goods from you OR Producer who performs part of the order you hold with your customer)",
+   "bn":"ডাউনস্ট্রিম (যে উৎপাদনকারী আপনার কাছে কাঁচামাল, প্রক্রিয়াকৃত কাঁচামাল, অংশ বা অর্ধ-সমাপ্ত মাল ক্রয় করেন বা গ্রহণ করেন / যে উৎপাদনকারী আপনার ক্রেতার কাছে নেওয়া অর্ডারের কিছু অংশ প্রদানে ভূমিকা নেন)"
+},
+{
+   "_id":"company_relation_upstream",
+   "en":"upstream (Producer who sells or sends you raw materials, processed raw materials, parts or semi-finished goods)",
+   "zh":"upstream (Producer who sells or sends you raw materials, processed raw materials, parts or semi-finished goods)",
+   "bn":"আপস্ট্রিম (যে উৎপাদনকারী আপনাকে কাঁচামাল, প্রক্রিয়াকৃত কাঁচামাল, অংশ বা অর্ধ-সমাপ্ত মাল বিক্রয় করেন বা পাঠান)"
+
+},
+{
+   "_id":"Participants",
+   "en":"Participants",
+   "zh":"Participants",
+   "bn":"অংশগ্রহণকারীরা"
+},
+{
+   "_id":"Suppliers",
+   "en":"Suppliers",
+   "zh":"Suppliers",
+   "bn":"সরবরাহকারীরা"
+},
+{
+   "_id":"downstream_producers",
+   "en":"Downstream Producers",
+   "zh":"Downstream Producers",
+   "bn":"ডাউনস্ট্রিম উৎপাদনকারীরা"
+},
+{
+   "_id":"upstream_producers",
+   "en":"Upstream Producers",
+   "zh":"Upstream Producers",
+   "bn":"আপস্ট্রিম উৎপাদনকারীরা"
+},
+{
+   "_id":"there_is_not_any_company_to_link",
+   "en":"There isn't any company to link ",
+   "zh":"There isn't any company to link ",
+   "bn":"There isn't any company to link "  
+},
+{
+   "_id":"partnership",
+   "en":"Partnership",
+   "zh":"合作伙伴",
+   "bn":"অংশীদারি/পার্টনারশিপ"
+},
+{
+   "_id":"joint_venture",
+   "en":"Joint Venture",
+   "zh":"合资公司",
+   "bn":"যৌথ উদ্যোগ"
+},
+{
+   "_id":"corporation",
+   "en":"Corporation",
+   "zh":"法人团体",
+   "bn":"কর্পোরেশন"
+},
+{
+   "_id":"foreign_investment",
+   "en":"Foreign Investment",
+   "zh":"外资投资公司",
+   "bn":"বিদেশী বিনিয়োগ"
+}
+]

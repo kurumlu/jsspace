@@ -1,0 +1,45 @@
+//*
+// Supply Chain Links page.
+//*
+
+template(name='links')
+   +supplychainInfo
+   .panel.panel-default
+      .panel-heading
+         h2 {{title}}
+      .panel-body.links
+         each lists
+            +links_list
+
+template(name='links_list')
+   unless isLinkable
+      h4(id="{{type}}") {{translate title}}
+   +with data
+      if show
+         table.table.table-bordered.table-striped.table-hover
+            thead
+               if showPager   
+                  tr.show_more
+                     th(colspan="2")
+                        +companies_pager
+            tbody
+               each companies
+                  +Template.dynamic template=rowTemplate
+
+template(name="links_linked_row")
+   unless ownCompany
+      tr
+         td.buttons
+            button.delink.btn.btn-success.btn-xs
+               span.glyphicon.glyphicon-link
+               | Unlink
+         td {{details.companyName}}
+
+template(name="links_linkable_row")
+   unless ownCompany
+      tr
+         td.buttons
+            button.link.btn.btn-info.btn-xs
+               span.glyphicon.glyphicon-link
+               | Link
+         td  {{details.companyName}}

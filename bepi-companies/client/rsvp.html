@@ -1,0 +1,62 @@
+<template name="companyInvitationModal">
+      <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">{{translate 'please_fill_in_your'}}</h4>
+            </div>
+            <div class="modal-body">
+               {{#if company.is 'producer'}}
+                  {{#autoForm id="companyProfile" schema=schema doc=company.details}}
+                     <fieldset>
+                        {{>afQuickField name="companyName" class="form-control"}}
+                        {{>afQuickField name="businessLicenseNumber" class="form-control"}}
+                        {{>afQuickField name="ownershipType"}}
+                        {{#if afFieldValueIs name="ownershipType" value="other"}}
+                          {{>afQuickField name="ownershipTypeOther" }}
+                        {{/if}}
+                        {{>afQuickField name="controllingShareholder"}}
+                        {{>afQuickFields name="address" class="form-control"}}
+                        {{>afQuickField name="yearCompanyFormed" class="form-control"}}
+                        {{>afQuickField name="otherCountriesPresence"}}
+                        {{#if afFieldValueIs name="otherCountriesPresence" value="yes"}}
+                            {{>afQuickField name="otherCountries"  multiple="true" class="form-control"}}
+                        {{/if}}
+                        {{>afQuickField name="annualTurnOver"}}
+                     </fieldset>
+                     <div>
+                        <button type="submit" class="btn btn-primary">{{translate 'submit'}}</button>
+                     </div>
+                  {{/autoForm}}
+               {{else}}
+                  {{> quickForm id="companyProfile" schema=schema type=displayType doc=company.details omitFields=omitFields}}
+               {{/if}}
+            </div>
+          </div>
+        </div>
+      </div> 
+      <button id="acceptButton" class="btn btn-success btn-lg">{{translate 'accept_invitation_button'}}</button>
+
+      <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">{{translate 'rejection_message'}}</h4>
+            </div>
+            <div class="modal-body">
+               <fieldset>
+                  <label for="message"></label>
+                  <textarea name="message" class="form-control" rows="10"></textarea>
+                  <div>
+                    <button id="rejectSubmitButton" class="btn btn-primary">{{translate 'submit'}}</button>
+                    <button id="rejectCancelButton" class="btn btn-default">{{translate 'cancel'}}</button>
+                  </div>
+                </fieldset>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <button id="rejectButton" class="btn btn-warning btn-lg">{{translate 'reject_invitation_button'}}</button>
+</template>

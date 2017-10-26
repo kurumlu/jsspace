@@ -1,0 +1,104 @@
+template(name="company")
+   | {{> Template.dynamic template=template}}
+
+template(name="companyView")
+   unless dormantActivation
+      +companyOpenWarning
+   if company.canEdit
+      if readonly
+         a#editCompanyProfile.btn.btn-success.btn-sm.pull-right(style="{{editVisible}}" href="/company/{{company.type}}/{{company._id}}?edit=true") {{translate 'edit'}}
+   .panel.panel-default
+      .panel-heading
+            h3.capitalize-letter
+                {{formTitle}} 
+      .panel-body
+         +companyProfileForm
+
+template(name="companyOpenWarning")
+   if company
+      if company.st 'open'
+         .alert.alert-warning
+            | {{warning}}
+            +resendInvite
+
+template(name="companyInvite")
+   h1 {{translate 'welcome_to_bepi'}}
+   .form-group
+      label {{translate 'company'}}
+      p {{company.details.companyName}}
+   if company.st 'active'
+      .alert.alert-info
+         p {{translate 'invitation_accepted'}}
+   else if company.st 'open'
+      if editMode
+         p {{translate 'invitation_introduction' $$=company.invitedBy.name}}
+         hr
+         .form-group
+            label {{translate 'company_address'}}
+            +companyAddress
+         .form-group
+            label {{translate 'contact_name'}}
+            p {{company.details.contact.name}}
+         .form-group
+            label {{translate 'contact_email'}}
+            p {{company.details.contact.email}}
+         .form-group
+            label {{translate "you_are_invited_by"}}
+            p {{company.invitedBy.name}}
+            p {{company.invitedBy.email}}
+         +companyInvitationModal
+      else
+         p {{translate 'please_use_invitation_link'}}
+         +resendInvite
+   else if company.st 'rejected'
+      .alert.alert-warning
+         label {{translate 'invitation_rejected'}}
+         p {{processMessage}}
+   else if company.st 'closed'
+      .alert.alert-warning
+         p {{translate 'invitation_closed'}}
+   else 
+      .alert.alert-danger
+         p {{translate 'invitation_error'}}
+
+template(name="resendInvite")
+   a#resendInvite(href="#") {{translate 'resend_activation_email'}}
+
+template(name="companyAddress")
+   p
+      | {{company.details.address.street}}<br>
+      | {{company.details.address.zip}} {{company.details.address.city}}<br>
+      | {{translate company.details.address.country}}<br>
+
+template(name="companyListElement")
+   li(style="list-style-type:none" )
+      if canView
+         a(href="{{pathFor 'company'}}") {{details.companyName}}
+      else
+         | {{details.companyName}}
+
+template(name="companyProfileForm")
+   +autoForm id="companyProfile" schema=schema type=displayType doc=company.details omitFields=omitFields buttonContent=false
+      fieldset
+         | {{> afQuickField name="companyName" class="form-control"}}
+         | {{> afQuickField name="DBID" class="form-control"}}
+         | {{> afQuickField name="customerId" class="form-control"}}
+         .panel.panel-default
+            .panel-heading
+               h5 {{translate 'address'}}
+            .panel-body
+               | {{> afQuickFields name="address" class="form-control"}}
+         unless hideRelation
+               | {{> afQuickField name="companyRelation" }}
+         unless hideContact
+            .panel.panel-default
+               .panel-heading
+                  h5 {{translate 'Contact'}}
+               .panel-body
+                  | {{> afQuickFields name="contact" class="form-control"}}
+         if showLanguage
+            | {{> afQuickField name="language" }}
+      if buttonVisible
+         div
+            button.btn.btn-primary(type='submit') {{translate 'submit'}}
+

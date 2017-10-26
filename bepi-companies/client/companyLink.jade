@@ -1,0 +1,74 @@
+template(name="companyLink")
+   +companyOpenWarning
+   h2 {{translate 'Supply_Chain_Links'}}: {{company.details.companyName}}
+   .form-inline
+      .form-group
+         input#show_linked(type="radio" name="show" checked="{{showLinked}}")
+         label Show linked companies
+         input#show_not_linked(type="radio" name="show" checked="{{showNotLinked}}")
+         label Show companies that can be linked
+   +companySearch
+   each lists
+      h3 {{title}}
+      if show
+         p Showing {{showing}} of {{total}}
+            button.btn.btn-default#show_more {{translate 'show_more'}}
+            button.btn.btn-default#show_all {{translate 'show_all'}}
+         table.table.table-striped
+            thead
+               tr
+                  th &nbsp;
+                  th {{translate 'company_name'}} 
+                  th {{translate 'address'}} 
+                  th  {{translate 'Contact_details'}}
+            tbody
+               each companies
+                  tr
+                     td
+                        if ../../showLinked
+                           button.delink.btn.btn-default.btn-xs
+                              span.glyphicon.glyphicon-link
+                              | Unlink
+                        else
+                           button.link.btn.btn-default.btn-xs
+                              span.glyphicon.glyphicon-link
+                              | Link
+                     +with details
+                        td {{companyName}}
+                        td {{address.street}}
+                           br
+                           | {{address.zip}} {{address.city}}
+                           br
+                           | {{translate address.country}}
+                        td {{contact.name}}
+                           br
+                           | {{contact.email}}
+      else
+         +loading
+
+template(name="companyMatch")
+   .panel.panel-default
+      .panel-heading
+         h3 {{title}}
+      .panel-body
+         table.table
+            thead
+               tr
+                  th {{translate 'company_name'}} 
+                  th {{translate 'address'}} 
+                  th  {{translate 'Contact_details'}}
+            tbody
+               tr
+               +with company.details
+                  td {{companyName}}
+                  td {{address.street}}
+                     br
+                     | {{address.zip}} {{address.city}}
+                     br
+                     | {{translate address.country}}
+                  td {{contact.name}}
+                     br
+                     | {{contact.email}}
+   button.btn.btn-success.btn-lg#link {{linkButton}}
+   |  
+   button.btn.btn-warning.btn-lg#cancel  {{translate 'cancel'}} 

@@ -1,0 +1,61 @@
+template(name="contractorLinks")
+   .container-fluid
+      .row
+         .col-md-16
+            +contractorLinksTableWrapper(label="contractor")
+               +with contractor
+                  +contractorUserRows
+      .row
+         .col-md-16
+            +contractorLinksTableWrapper(label="linked_individuals")
+               +each contractorlinks
+                  +contractorUserRows
+
+
+template(name="contractorLinksTableWrapper")
+   +searchCount
+   h3 {{translate label}}: 
+   hr
+   br
+   br
+   table.table.table-bordered.table-striped.table-hover
+      thead
+         tr
+            th           
+            th {{translate 'company_name'}}
+            th {{translate 'name'}}
+            th {{translate 'email'}}
+            th {{translate 'roles'}}
+            //th {{translate 'assigned_sites'}}
+      tbody
+         {{> UI.contentBlock}}
+
+
+template(name="contractorUserRows")
+   tr
+      td
+         +contractorLinksaddGlyphicons
+      td {{profile.companyName}}
+      td {{profile.name}}
+      td
+         +each emails
+            {{address}}
+      td 
+         +each roles
+            {{this}} 
+      //td
+         +each sites 
+            {{siteName}}  
+            if hasContact     
+               a.assignContractor.btn.btn-default.btn-xs(type="button", title="{{translate 'change_contractors_assignment'}}", href="{{pathFor 'assignNewContractor' query=queryString}}")
+                  span.editIcon.glyphicon.glyphicon-erase
+
+template(name="contractorLinksaddGlyphicons")
+   a.btn.btn-default.btn-xs(href="{{pathFor 'user' query='view=true'}}" title='View profile')
+      span.viewIcon.glyphicon.glyphicon-zoom-in
+   if isInRole 'bepi'
+      a.editUserToCompany.btn.btn-default.btn-xs(type="button", title="{{translate 'edit_user'}}", href="{{pathFor 'user' query='edit=true'}}")
+         span.editIcon.glyphicon.glyphicon-pencil
+      a.removeUser.btn.btn-default.btn-xs(href='#' title='Delete')
+         span.deleteIcon.glyphicon.glyphicon-remove
+

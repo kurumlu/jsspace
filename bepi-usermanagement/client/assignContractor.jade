@@ -1,0 +1,65 @@
+template(name="assignNewContractor")
+   .row
+      .col-md-16
+         h3 {{translate 'Contractor_Assignment_to_Site'}}
+   .row
+      .col-md-16
+         +siteInfo
+   .row
+      .col-md-16
+         +assignContractorTableWrapper(title="assigned_individual_contractor")
+               +each assignedIndividual
+                  +contractorRows(data=this)
+   .row
+      .col-md-16
+         +assignContractorTableWrapper(title="contrator_contact_of_assigned_contractor")
+               +each contractorContact
+                  +contractorRows(data=this)
+   .row
+      .col-md-16
+         +assignContractorTableWrapper(title="other_possible_contractors_to_assign")
+               +each otherContractors
+                  +contractorRows(canEdit=true data=this)
+
+
+template(name="siteInfo")
+   h3 {{translate 'site_name'}} : {{site.siteName}}
+   p {{translate 'address'}} : {{site.siteAddress.street}} 
+   p {{site.siteAddress.zip}} {{site.siteAddress.state}} {{site.siteAddress.city}} {{translate site.siteAddress.country}}
+   hr
+
+
+template(name="assignContractorTableWrapper")
+   +searchCount
+   h4 {{translate title}}:
+   table.table.table-bordered.table-striped.table-hover
+      thead
+         tr 
+            th
+            th {{translate 'company_name'}}
+            th {{translate 'name'}}
+            th {{translate 'email'}}
+            th {{translate 'roles'}} 
+      tbody
+         {{> UI.contentBlock}}
+   br
+   br
+
+template(name="contractorRows")
+   tr
+      td
+         if canEdit
+            a.assign.btn.btn-default.btn-xs(type="button", title="{{translate 'assign_new_contractor'}}")
+               span.editIcon.glyphicon.glyphicon-edit
+      td {{data.profile.companyName}}
+      td {{data.profile.name}}
+      td
+         +each data.emails
+            {{address}}
+      td 
+         +each data.roles
+            {{this}} 
+
+
+
+

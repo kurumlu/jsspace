@@ -1,0 +1,184 @@
+template(name='companies')
+   .panel.panel-default
+      .panel-heading
+         h2 {{title}}
+      .panel-body
+         +companyOpenWarning
+         if showInfo
+            +supplychainInfo
+         +companySearch
+         +each lists
+            +companyList
+
+template(name="companyList")
+   div(class="companies_list {{template}}")
+      if titleVisible
+         h4 {{translate title}}
+      +with data 
+         if show
+            .show_more
+               if showPager   
+                  +companies_pager
+               else
+                  | &nbsp;
+            table.table.table-bordered.table-striped.table-hover
+               thead
+                  tr
+                     +Template.dynamic template=headerTemplate
+               tbody
+                  each companies
+                     +Template.dynamic template=rowTemplate
+            unless hasResults
+               p No results.
+         else
+            +loading
+//*
+// Active companies (usually upstream), used for the "My companies/Showing ... for ..." pages.
+//*
+
+template(name="companies_active_header")
+   th &nbsp;
+   th(style="vertical-align:top;") {{translate 'Supply_Chain_Links'}}
+   th(style="vertical-align:top;") DBID 
+   th(style="vertical-align:top;") {{translate 'company_name'}}
+   th(style="vertical-align:top;") {{translate 'city'}}
+   th(style="vertical-align:top;") {{translate 'country'}}
+   th(style="vertical-align:top;") {{translate 'Contact'}}
+   th(style="vertical-align:top;") {{translate 'contact_email'}}
+
+template(name="companies_active_row")
+  tr.companyRow
+    td.nowrap
+      +companyButtons
+    td.nowrap
+      +companyLinkButtons
+    +companyColumns
+
+//*
+// Open invitations, used for the "My companies/Showing ... for ..." pages.
+//*
+
+template(name="companies_invite_header")
+   th
+      button#inviteCompany.btn.btn-default.btn-xs(type='button', title="{{translate 'invite_company'}}")
+         span.glyphicon.glyphicon-plus
+   th(style="vertical-align:top;") {{translate 'Supply_Chain_Links'}}
+   th(style="vertical-align:top;") DBID 
+   th(style="vertical-align:top;") {{translate 'company_name'}}
+   th(style="vertical-align:top;") {{translate 'city'}}
+   th(style="vertical-align:top;") {{translate 'country'}}
+   th(style="vertical-align:top;") {{translate 'Contact'}}
+   th(style="vertical-align:top;") {{translate 'contact_email'}}
+   th {{translate 'status'}}
+
+template(name="companies_invite_row")
+   tr.companyInviteRow
+      td.nowrap
+         +companyButtons
+      td.nowrap
+         +companyLinkButtons
+      +companyColumns
+      td {{translate statusInfo}}
+         if rejectMessage
+           button.messageButton.btn.btn-xs(type='button', class='btn-warning', data-toggle='popover', data-content='{{rejectMessage}}', title='Message', data-placement='left')
+             span.noteIcon.glyphicon.glyphicon-info-sign
+
+template(name="companyColumns")
+   td {{details.DBID}}
+   td {{details.companyName}}
+   td {{details.address.city}}
+   td {{translate details.address.country}}
+   td {{details.contact.name}}
+   td {{details.contact.email}}
+
+//*
+// Button templates used for companies listing and invites.
+//*
+                
+template(name="companyButtons")
+   if is 'producer'
+      unless isInRole 'producer'
+        a.btn.btn-default.btn-xs(href="{{pathFor 'sites'}}" title="{{translate 'producer_sites'}}")
+           span.editIcon.glyphicon.glyphicon-map-marker
+   a.btn.btn-default.btn-xs(href="{{pathFor 'supplychain'}}" title="{{translate 'View_profile'}}")
+      span.viewIcon.glyphicon.glyphicon-zoom-in
+   if st 'active'
+      each subTypes
+        a.btn.btn-default.btn-xs(href="{{pathFor 'companies' t=this data=..}}" title="{{showLinks}}")
+          span.producersIcon.glyphicon.glyphicon-leaf
+   if canEdit      
+      a.btn.btn-default.btn-xs(href="{{pathFor 'company' query='edit=true'}}" title="{{translate 'edit'}}")
+        span.editIcon.glyphicon.glyphicon-pencil
+   if canClose
+      a.closeCompany.btn.btn-default.btn-xs(href='#' title="{{translate 'Delete'}}")
+         span.deleteIcon.glyphicon.glyphicon-remove
+
+template(name="companyLinkButtons")
+   unless is 'participant'
+      a.btn.btn-default.btn-xs(href="{{pathFor 'links'}}" title="{{translate 'Edit_company_links'}}")
+         span.editIcon.glyphicon.glyphicon-link
+   if isInRole 'participant,supplier' 
+      if is 'producer'
+        if st 'active'
+          a.inviteOtherProducers.btn.btn-default.btn-xs(href='#' title='Request to invite other producers')
+              span.producersIcon.glyphicon.glyphicon-envelope
+   if isInRole 'participant'
+      if is 'supplier'
+         if st 'active'    
+          a.inviteOtherProducers.btn.btn-default.btn-xs(href='#' title='Request to invite other producers')
+              span.producersIcon.glyphicon.glyphicon-envelope
+
+template(name="supplychainInfo")
+   #supplychainInfo
+      .panel.panel-info
+         .panel-heading
+            h4.clickable.collapse-supplychainInfo(href="#" data-toggle="collapse" data-parent="#supplychainInfo" data-target=".supplychainInfo")
+               +chevrons 'supplychainInfo'
+               | {{translate 'this_page_allows_you_to_manage'}}
+         .panel-body.collapse.supplychainInfo
+            h3 {{translate 'producers_in_your_supplychain'}}   
+            ol   
+              li {{translate 'upstream_producer'}}
+              img.upstreamDownstreamInfoImg(src="../../packages/fta_bepi-companies/assets/images/upstream.png" alt="upstream diagram")
+              p
+              br
+              li {{translate 'downstream_producer'}}
+              img.upstreamDownstreamInfoImg(src="../../packages/fta_bepi-companies/assets/images/downstream.png" alt="downstream diagram")
+              p
+              br
+              li {{translate 'producer_who_performs_part_of_the_order'}}
+              img.upstreamDownstreamInfoImg(src="../../packages/fta_bepi-companies/assets/images/downstream2.png" alt="downstream2 diagram")
+              p
+              br
+              p {{translate 'to_invite_one_of_your_producers'}}
+                span.button.btn.btn-default.btn-xs(type='button')
+                        span.glyphicon.glyphicon-plus
+            p {{translate 'please_make_sure_to_have'}}
+            ul
+              li {{translate 'company_name'}}
+              li {{translate 'company_address'}}
+              li {{translate 'contact_name'}}
+              li {{translate 'contact_email'}}
+            p {{translate 'after_inviting_a_producer'}} 
+
+template(name="companies_pager")
+   | Showing {{showing}} of {{total}}
+   button.btn.btn-default#show_more {{translate 'show_more'}}
+   button.btn.btn-default#show_all {{translate 'show_all'}}
+   
+
+template(name="companyCountrySelector")
+   li.dropdown
+      a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 
+         span.glyphicon.glyphicon-search
+            span.caret
+      ul.dropdown-menu
+         +each options
+            li
+               a.CompanyCountrySelector(href='#' id="{{this.code}}") {{this.name}} 
+
+template(name="textSelector")
+   a(href='#') 
+      span.glyphicon.glyphicon-search
+         span.caret 
+      input.form-control(id="searchCompanyBy_#{field}_#{linkType}", type="text" placeholder="")
