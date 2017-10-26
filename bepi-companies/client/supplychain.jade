@@ -2,9 +2,7 @@
 // Supply Chain Mapping page, which is also the 'company detail' page.
 //*
 
-
 template(name='supplychain')
-   +resendPendingInvitation
    .panel.panel-default
       .panel-heading
          h4.clickable.collapse-companyDetail(href="#" data-toggle="collapse" data-parent="#companyDetail" data-target=".companyDetail")
@@ -25,13 +23,6 @@ template(name='supplychain')
       .panel-body.collapse.supplychain
          each lists
             +supplychain_list
-
-template(name='resendPendingInvitation')
-   if isPending
-      .panel.panel-warning
-         .panel-heading
-               p {{info}}.
-               +resendInvite
 
 template(name="supplychain_list")
    // only show list if results

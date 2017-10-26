@@ -85,35 +85,6 @@ Meteor.methods
 # the companies to who the user can link this company.
 ###
 
-automaticLinking = (source, target, action) ->
-   console.log "automaticLinking...#{source}...#{target}...#{action}"
-   @AutomaticBranchLinking.emptyBranchLinks()
-   # participant of a branch should be automatically delinked as well
-   participantId = @AutomaticBranchLinking.branchLinks source._id
-   console.log "found participantId...#{participantId}"
-   user = Meteor.user()
-   if participantId
-      if action is "delink"
-         Companies.update target._id,
-            $pull:
-               "link.participant": participantId
-            $push:
-               "metaData.links.#{participantId}":
-                  linkedAt: new Date()
-                  linkedBy: user._id
-                  linkAction: action
-                  automaticLinksBy:source._id
-      else if actions is "link"
-         Companies.update target._id,
-            $addToSet:
-               "link.participant": participantId
-            $push:
-               "metaData.links.#{participantId}":
-                  linkedAt: new Date()
-                  linkedBy: user._id
-                  linkAction: action
-                  automaticLinksBy:source._id
-
 Meteor.methods
    linkable: (_id,type,direction,query={})->
       guard = new CompanyGuard @userId, 'companies.linkable'
@@ -141,13 +112,6 @@ Meteor.methods
          upstream = targetCompany
          downstream = sourceCompany
       guard.canLink(upstream, downstream) # is it possible to connect these companies in this direction?
-
-      #if a branch links one of its producer then the participant of a branch should be linked automatically  
-      if sourceCompany.type is 'branch' and targetCompany.type is 'producer' 
-         console.log 'auto linking'
-         branchLinking = new AutomaticBranchLinking()
-         branchLinking.automaticLinking(source,target,"link")
-
       # Actual update
       Companies.update upstream._id,
          $addToSet:
@@ -159,7 +123,6 @@ Meteor.methods
                linkAction: "link"
       return {type:sourceCompany.type,direction:direction} # return this so the correct lists can be reloaded
    delink: (arg)->
-      console.log arg
       {source,target,direction} = arg
       guard = new CompanyGuard @userId, 'companies.delink'
       check direction, Match.OneOf 'upstream','downstream'
@@ -177,12 +140,6 @@ Meteor.methods
       unless upstream.isUpstreamFrom(downstream)
          throw new Meteor.Error "not-linked","No link found between upstream #{upstream.type} (#{upstream._id} and downstream #{downstream.type} (#{downstream._id})"
 
-      # If a branch is delinked from a producer, the branch linked participant should be delinked, unless there is another branch linking to the same participant
-      if sourceCompany.type is 'branch' and targetCompany.type is 'producer' 
-         branchLinking = new AutomaticBranchLinking()
-         branchLinking.automaticLinking(source,target,"delink")
-         
-      #if a branch delinking a producer it should be automatically delinked to its participant as well, unless there is another branch linking to the same participant
       Companies.update upstream._id,
          $pull:
             "link.#{downstream.type}": downstream._id

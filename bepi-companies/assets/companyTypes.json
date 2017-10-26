@@ -481,15 +481,13 @@
             "query": true,
             "invite": true,
             "link": true,
-            "delink": true,
-            "detail" : true
+            "delink": true
          },
          "downstream": {
             "query": true,
             "invite": true,
             "link": true,
-            "delink": true,
-            "detail" : true
+            "delink": true
          }
       }
    },

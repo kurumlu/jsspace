@@ -40,7 +40,6 @@ Package.onUse(function(api) {
                 'server/indexes.coffee',
                 'server/company.coffee',
                 'server/companyGuard.coffee',
-                'server/automaticBranchLinking.coffee',
                 'server/companies.coffee',
                 'server/companyMethods.coffee',
                 'server/companyLinkMethods.coffee',

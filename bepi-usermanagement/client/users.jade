@@ -190,9 +190,10 @@ template(name="companyUsers")
 
 template(name="linkGlyphicon")
    if isContractorContact
-      //a.btn.btn-default.btn-xs(href="{{pathFor 'contractorLinks' data=this.data query='type={{this.role}}' }}" title='Show contractors links')
-      a.btn.btn-default.btn-xs(href="{{pathFor 'contractorLinks' data=this.data }}" title='Show contractors links')
+      a.btn.btn-default.btn-xs(href="{{pathFor  route ='contractorLinks' data=this.data}}" title='Show contractors links')
          span.viewIcon.glyphicon.glyphicon-link
+
+
 
 template(name="userrows")
    tr
@@ -217,12 +218,9 @@ template(name="userrows")
          td
             +each contractorSites 
                {{siteName}}
-               //only Bepi can assign a contractor
-               //if user.isBepi
-                  if hasContact
-                     a.assignContractor.btn.btn-default.btn-xs(type="button", title="{{translate 'change_contractors_assignment'}}", href="{{pathFor 'assignNewContractor' query='contractor={{data.profile.companyName}}' query=queryString}}")
-                           span.editIcon.glyphicon.glyphicon-erase
-               br
+               if hasContact
+                  a.assignContractor.btn.btn-default.btn-xs(type="button", title="{{translate 'change_contractors_assignment'}}", href="{{pathFor 'assignNewContractor' query='contractor={{data.profile.companyName}}' query=queryString}}")
+                     span.editIcon.glyphicon.glyphicon-erase
 
 
 

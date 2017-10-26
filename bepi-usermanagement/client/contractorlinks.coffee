@@ -11,19 +11,12 @@ Router.route 'user/contractorlinks/:_id?',
    data: ->
    	if this.ready() and Meteor.user()
          id=this.params?._id
-         contractor = Meteor.users.findOne {_id:id}
-         type = contractorContact(id)
-         Meteor.autorun =>
-            Meteor.subscribe 'sites',{"#{type}.id":id},subCb('sites',debugThis)
          data = 
-            contractor:contractor
+            contractor:Meteor.users.findOne {_id:id}
             contractorlinks:Meteor.users.find 
                $and: [{"profile.contractorContactId":id} , {_id:{$ne:id}}]
          return data
 
-contractorContact = (userId)->
-   contractors =  Meteor.users.findOne {_id:userId}
-   return (_.intersection contractors.roles, ['consultantContact','assessorContact','chemicalauditorContact','testlabContact'])[0]
 individualRoles = (roles) ->
    newRoles=[]
    _.each roles, (role)->
@@ -42,9 +35,6 @@ surveys =
 
 Template.contractorUserRows.helpers
    sites: ->
-      # user = Meteor.users.findOne this._id
-      # if user
-      #    sites = Sites.find {""}
       email = @.emails[0].address
       if email
          roles = individualRoles @.roles

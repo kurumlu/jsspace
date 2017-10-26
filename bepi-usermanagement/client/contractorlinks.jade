@@ -26,7 +26,7 @@ template(name="contractorLinksTableWrapper")
             th {{translate 'name'}}
             th {{translate 'email'}}
             th {{translate 'roles'}}
-            //th {{translate 'assigned_sites'}}
+            th {{translate 'assigned_sites'}}
       tbody
          {{> UI.contentBlock}}
 
@@ -43,7 +43,7 @@ template(name="contractorUserRows")
       td 
          +each roles
             {{this}} 
-      //td
+      td
          +each sites 
             {{siteName}}  
             if hasContact     

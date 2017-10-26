@@ -1,4 +1,4 @@
-debugThis = debug.context('users')
+debugThis = true
 ###
 AGGREED WITH FTA:
 Show more and show all buttons apply all type of companies or contractors search at ones.
@@ -10,7 +10,6 @@ UsersSub =
 
 initLimit=10
 limit = new ReactiveVar(initLimit)
-contractorSiteIds = new ReactiveVar(undefined)
 
 show = (nbr)-> _.gt nbr , 10 
 
@@ -29,12 +28,6 @@ Router.route '/users/:roles?',
       Translation.addContext  'general','user_management','companies','sites'
       Session.set  'userSearch', {}
       limit.set(initLimit)
-      contractorSiteIds.set undefined
-      if isUserBepi()
-         query = $or:[ {assessorIndividual:{$exists:1}}, {assessorContact:{$exists:1}},{consultantIndividual:{$exists:1}},{consultantContact:{$exists:1}},{testlabIndividual:{$exists:1}},{testlabContact:{$exists:1}},{chemicalauditorIndividual:{$exists:1}}, {chemicalauditorContact:{$exists:1}} ]
-         Meteor.call 'searchSites',query,(err,res)=>
-            Alert.new err, 'danger' if err
-            contractorSiteIds.set res if res
       this.next()
    waitOn: -> UsersSub.subs
    data: ->
@@ -43,10 +36,9 @@ Router.route '/users/:roles?',
          delete search.userType
          q = _.extend search
          data = {}
-         roles = @params.roles
-         user= Meteor.user()
+         roles = this.params.roles
          if isUserBepi()
-            #bepi may have several view for users:  bepi,companies, contractors
+            #bepi may have several view for suers bepi,companies, contractors
             if !roles or roles is 'bepi'
                _.extend q,
                   roles:'bepi'
@@ -65,11 +57,6 @@ Router.route '/users/:roles?',
                      "#{company}Users": Meteor.users.find q, {limit:limit.get()}
                      isCompany:true
             else if roles is 'contractors'
-               sites=[]
-               Meteor.autorun =>
-                  ids = contractorSiteIds.get()
-                  if ids and ids.length > 0
-                     Meteor.subscribe 'sites',{_id:{$in:ids}},subCb('sites',debugThis,{ids:ids})
                _.each contractors , (contractor)->
                   _.extend q , 
                      roles:{$in:["#{contractor}","#{contractor}Contact"]}
@@ -78,6 +65,7 @@ Router.route '/users/:roles?',
                      isContractor:true
          else if isUserAdmin()
             #users management view of a company Admin
+            user= Meteor.user()
             types= companytypes() 
             _.each types , (company) ->
                _.extend data ,
@@ -85,13 +73,12 @@ Router.route '/users/:roles?',
             data.isCompany=true
          else if isUserContact()
             #users management view of a contractor Contact 
-            #contractor users has assigned Sites column. To be able to fill this column we need to getthe Sites list
-            Meteor.autorun =>
-               Meteor.subscribe 'sites',{},subCb('sites',debugThis)
+            user= Meteor.user()
+            contractor=contactType()
             _.extend q , 
                $or:[{_id:user._id},{"profile.contractorContactId":user._id}]
                _.extend data , 
-                   "#{contactType()}Users": Meteor.users.find q,{limit:limit.get()} 
+                   "#{contractor}Users": Meteor.users.find q,{limit:limit.get()} 
             data.isContractor=true
          else
             Router.go "home"  
@@ -110,6 +97,7 @@ isUserContact = -> if Roles.userIsInRole Meteor.userId(), ['consultantContact','
 isUserBepi =  -> if Roles.userIsInRole Meteor.userId(), ['bepi'] then return true else return false
 isCompanyUser = -> if Roles.userIsInRole Meteor.userId(), ['participantAdmin','participant','branchAdmin','branch','supplierAdmin','supplier','producerAdmin','producer'] then return true else return false
 isContractorsUser = -> if Roles.userIsInRole Meteor.userId(), ['consultantContact','consultant','assessorContact','assessor','chemicalauditorContact','chemicalauditor','testlabContact','testlab'] then return true else return false
+
 
 companytypes = () ->
    roles= Meteor.user().roles
@@ -168,13 +156,29 @@ changeSearch = (key, eventId,userType) ->
    unless userType is search.userType  
       search={}
       search.userType = userType
-   value = ($("#{eventId}").val()).trim()
+   value = $("#{eventId}").val()
    if value is "" then delete search["#{key}"]
    else 
       search["#{key}"]  =
          '$regex':value
          $options:"i"
    Session.set 'userSearch', search
+
+
+changeSearch = (key, eventId,userType) ->
+   search = Session.get 'userSearch'
+   #if search goes for different type of user then we reset the search values
+   unless userType is search.userType  
+      search={}
+      search.userType = userType
+   value = $("#{eventId}").val()
+   if value is "" then delete search["#{key}"]
+   else 
+      search["#{key}"]  =
+         '$regex':value
+         $options:"i"
+   Session.set 'userSearch', search
+
 
 Template.bepiUsers.events
    'click .addBepiUser': (e) -> Router.go "user", {}, {query:"role=bepi"}
@@ -231,9 +235,12 @@ Template.userrows.helpers
       #contractor user -> check with user role
       if isContractorsUser()  then return true else return false
    contractorSites:->
-      sites = []
-      if @role and @data._id
-         sites = Sites.find {"#{@role}Individual.id":@data._id}
+      email = @.data.emails[0].address
+      survey=surveys[@.role]
+      if email is "mohammad.kashem@intertek.com" then  console.log "email.. #{email}...survey...#{survey}...role #{@role}"
+      if email
+         sites = Sites.find({ "#{@.role}Individual.email":email , "status.#{survey}":{$in:['ongoing','assigned','open']}}).fetch()
+         #sites = Sites.find({ "#{@.role}Individual.email":email}).fetch()
       return sites
    queryString:-> "contractor="+Template.instance().data.data._id
    hasContact:->
@@ -247,8 +254,6 @@ Template.linkGlyphicon.helpers
          contact = @.role.concat "Contact"
          if _.includes @.data.roles, contact then return true
       return false
-   contractorType:-> @.role
-
 
 Template.contractorUsers.helpers
    warning: ->

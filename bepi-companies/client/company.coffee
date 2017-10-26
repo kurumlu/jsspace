@@ -1,4 +1,4 @@
-debugThis = debug.context 'companies'
+debugThis = true
 _ = lodash
 
 ###
@@ -37,6 +37,38 @@ Router.route '/company/:type/:_id?',
    data: ->
       if this.ready()
          return new CompanyView @params
+         ###
+         data =
+            type: this.params.type
+            company: Companies.findOne(this.params._id) or new Company()
+         unless Meteor.userId()
+            data.template = 'companyInvite'
+         else
+            data.template = 'companyView'
+         companyType = CompanyTypes.findOne {type:this.params.type}
+         formConfig =
+            roles:
+               canEdit: companyType?.canEdit or []
+               canInsert: companyType?.canInvite or []
+            omitFields:
+               insert: []
+               edit: ["contactName","contactEmail","contactEmailConfirm",'companyRelation']
+               readonly:["contact.emailConfirm","companyRelation"]
+            schemas:
+               edit: companyType.simpleSchema()
+               insert: companyType.fullSchema()
+               readonly: companyType.fullSchema()
+               invitation: companyType.invitationSchema()
+         if Meteor.user().isBepi()
+            formConfig.omitFields.edit = []
+            formConfig.schemas.edit = companyType.fullSchema()
+         unless Meteor.user().isProducer()
+            formConfig.omitFields.insert.push  'companyRelation'
+         _.extend data, FormMode.extended this.params, formConfig
+         if @params.query.insert or (@params.query.edit and Meteor.user().isBepi())
+         
+         return data
+         ###
 ###
 # _id: company we are looking at
 # action: 'view', 'edit' or 'insert'
@@ -64,9 +96,8 @@ class CompanyView
       else if query.new
          @action = 'new'
          @schema = @companyType.fullSchema()
-         @omit 'relation'
-         # unless @user?.company()?.isProducer()
-         #    @omit 'relation'
+         unless @user?.company()?.isProducer()
+            @omit 'relation'
          @showLanguage = true if @company.isProducer()
       else if query.invitation
          @action = 'invitation'
@@ -95,7 +126,8 @@ AutoForm.hooks
          id = Router.current().params._id
          type = Router.current().params.type
          delete insertDoc.contactEmailConfirm
-         companyRelation = Router.current().params.query.relation
+         companyRelation = insertDoc.companyRelation
+         delete insertDoc.companyRelation
          dormantActivation = Router.current().params?.query?.dormantActivation
          if insertDoc.contact
             insertDoc.contact.email = insertDoc.contact.email.toLowerCase()
@@ -120,20 +152,16 @@ AutoForm.hooks
          else
             invitedBy = []
             invitedBy = _.intersection Meteor.user().roles , ['bepi','producer','supplier','participant','branch','producerAdmin','supplierAdmin','participantAdmin','branchAdmin']
-            #if a new branch is invited  a  flag ownProducersVisibleToParticipant will be set to true. This can later change and can become optinal
-            if type is 'branch' then _.extend insertDoc, {ownProducersVisibleToParticipant:true}
-            #When a producer invited by a branch . we will check this flag and decide  automatically linking to its participant or not
-            Meteor.call 'inviteCompany', insertDoc, type, invitedBy[0] ,companyRelation, (e,r) ->
+            Meteor.call 'inviteCompany', insertDoc, type, invitedBy[0] ,companyRelation,  (e,r) ->
                if r
                   
                   alertMsg = Translation.translate 'Successfully_invited_type_company', [{replace:"__type",with:"#{type}"}]
                   Alert.new alertMsg, "success"
                   alert Translation.translate 'Invitation_email_is_being_sent'
                   #reloading page solves the problem of invitation downstream producers #310 
-                  #document.location.reload(true)
-                  if Meteor.user()
-                     unless type is 'participant' then Router.go "links", {_id:r}
-                     else Router.go "companies", {t:type}
+                  document.location.reload(true)
+                  unless type is 'participant' then Router.go "links", {_id:r}
+                  else Router.go "companies", {t:type}
                else
                   if e.error is "not-allowed"
                      #bepi can not link companies
@@ -154,9 +182,9 @@ AutoForm.hooks
                                  console.log e
                                  Alert.new message, "danger"
                         Router.go 'companies', {t:type}
-         $('.modal-backdrop').remove()
-         this.done()
-         return false
+         #$('.modal-backdrop').remove()
+         #this.done()
+         #return false
       onError: (operation, result, template) ->
          console.log this
          console.log operation
@@ -167,7 +195,6 @@ Template.resendInvite.events
    'click #resendInvite': (e,t) ->
       e.preventDefault()
       type= Router.current().params?.type
-      unless type then type = this.company.type
       if type
          Meteor.call 'resendCompanyInvite', this.company._id,  (e,r) ->
             if r
@@ -176,6 +203,8 @@ Template.resendInvite.events
             else
                Alert.new e.reason, "danger"
          Router.go 'companies', {t:type}
+
+
 
 Template.companyView.helpers
    formTitle :->
@@ -193,6 +222,7 @@ Template.companyView.helpers
       query = Router.current().params?.query
       dormantActivation = query?.dormantActivation
       if dormantActivation then return true else return false
+
 
 Template.companyProfileForm.helpers
    buttonVisible:->

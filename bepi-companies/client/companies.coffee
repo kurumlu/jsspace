@@ -12,16 +12,12 @@ companyLists = []
 ###
 class CompanyList
    constructor: (arg)->
-      {@list,@companyId,@type,@status,@template,@titleVisible=true} = arg
+      {@list,@companyId,@type,@status,@template} = arg
       @title = arg.title or "#{@list}_#{@type}_#{@status}" # default title
-      if arg.companyId then company = Companies.findOne arg.companyId
-      #fix for #853
-      if company and company?.type is "producer" and arg.type is "producer"
-      #if  arg.type is "producer"   
-         @title = "#{@list}_#{@type}_#{@status}_for_#{@type}"
       @ids = new ReactiveVar undefined
       @limit = new ReactiveVar defaultLimit
-      if arg.titleVisible then @titleVisible = arg.titleVisible
+      # figure out the title of the section
+      # @translation = {invites:'Pending_type_invites',upstream:'Showing_type',downstream:'Downstream_producers'}[@list]
       Meteor.autorun => @runQuery()
       Meteor.autorun =>
          i = @limitedIds()
@@ -95,7 +91,6 @@ route = (config)->
          if this.ready() and user
             type = @params.t
             _id = @params._id
-            unless _id then _id = Meteor.user().profile?.company
             company = Companies.findOne _id if _id
             companyLists = lists(_id,company,type)
             data =
@@ -145,9 +140,7 @@ route
          type: type
          status: 'active'
          template: activeTemplate
-      #if company and  (company.type is companyType._id) and companyType.isBidirectional()
-      #only producers has downstream companies
-      if company and company.isProducer()   
+      if company and (company.type is companyType._id) and companyType.isBidirectional()
          lists.push new CompanyList
             list:'downstream'
             companyId: _id
@@ -160,15 +153,6 @@ route
          type: type
          status: 'invite'
          template: inviteTemplate
-      #if company and  (company.type is companyType._id) and companyType.isBidirectional()
-      #only producers has downstream companies
-      if company and company.isProducer() 
-         lists.push new CompanyList
-            list:'downstream'
-            companyId: _id
-            type: type
-            status:'invite'
-            template: inviteTemplate
       return lists
 
 # Implementation of #766 and #769:
@@ -221,23 +205,14 @@ Template.supplychain.helpers
          showLanguage:false
       return formConfig
 
-Template.resendPendingInvitation.helpers
-   info: ->
-      type = @company?.type
-      if type
-         return Translation.translate 'This_type_company_has_not_been_activated', [{replace:"__type",with:"#{type}"}]
-      return ''
-   isPending: ->
-      status = @company?.status
-      if status is "open" then return true
-      else 
-         return false
 
 route
    path: 'links/:_id',
    name: 'links'
    template: 'links'
-   title: (company,type)-> "#{Translation.translate('Supply_Chain_Links')} - #{companyTitle(company)}"
+   title: (company,type)-> 
+      console.log "#{Translation.translate('Supply_Chain_Links')} - #{companyTitle(company)}"
+      return "#{Translation.translate('Supply_Chain_Links')} - #{companyTitle(company)}"
    lists: (_id,company)->
       type = CompanyTypes.findOne(company.type)
       linked = 'links_linked'
@@ -281,7 +256,7 @@ rerun = (res)->
    $('html,body').animate({scrollTop: $("##{res.type}").offset().top}) # keep the current list in view
 
 Template.companyList.events
-   'click #inviteCompany': (e,t) -> Router.go "company", {type: Router.current().params.t}, {query:"new=true&relation=#{t.data.list}"}
+   'click #inviteCompany': -> Router.go "company", {type: Router.current().params.t}, {query:"new=true"}
 
 Template.links_list.events
    'click .link': (e,t)->
@@ -339,14 +314,14 @@ Template.companyLinkButtons.events
       producer =
          name:"#{@.details.contact.name}"
          email:"#{@.details.contact.email}"
-      participant = 
-         name:user.profile.name
-         email:user.emails[0].address        
-      #send mail to: producer and cc: to participant
-      Meteor.call 'sendMail' , 'inviteOtherProducers' , 'BEPI activity', request, producer, participant, (err,result) ->
+      Meteor.call 'sendMail' , 'inviteOtherProducers' , 'BEPI activity', request, producer ,(err,result) ->
          if err
             Alert.new err, 'danger'
-         if result
+      #send mail to participant
+      Meteor.call 'sendMail' , 'inviteOtherProducers' , 'BEPI activity', request, user ,(err,result) ->
+         if err
+            Alert.new err, 'danger'
+         else if result
             message = Translation.translate 'email_to_company_requesting_invite_other_producer', [{noTranslation:"__companyName",with:"#{request.companyName}"}] 
             Alert.new message, 'success'
       return

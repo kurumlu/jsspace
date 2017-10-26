@@ -12,9 +12,8 @@ template(name='companies')
 
 template(name="companyList")
    div(class="companies_list {{template}}")
-      if titleVisible
-         h4 {{translate title}}
-      +with data 
+      h4 {{translate title}}
+      +with data
          if show
             .show_more
                if showPager   
@@ -23,8 +22,8 @@ template(name="companyList")
                   | &nbsp;
             table.table.table-bordered.table-striped.table-hover
                thead
-                  tr
-                     +Template.dynamic template=headerTemplate
+                tr
+                   +Template.dynamic template=headerTemplate
                tbody
                   each companies
                      +Template.dynamic template=rowTemplate
@@ -97,7 +96,6 @@ template(name="companyColumns")
                 
 template(name="companyButtons")
    if is 'producer'
-      unless isInRole 'producer'
         a.btn.btn-default.btn-xs(href="{{pathFor 'sites'}}" title="{{translate 'producer_sites'}}")
            span.editIcon.glyphicon.glyphicon-map-marker
    a.btn.btn-default.btn-xs(href="{{pathFor 'supplychain'}}" title="{{translate 'View_profile'}}")

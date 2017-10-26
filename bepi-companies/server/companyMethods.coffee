@@ -114,7 +114,6 @@ Meteor.methods
          downstream = true
       delete details.companyRelation
       delete details.contact.emailConfirm
-      #if type is 'producer' and invitedBy is 'branch'then  _.extend details, {brach}
       doc =
          type: type
          details: details
@@ -135,13 +134,6 @@ Meteor.methods
       console.log "doc: " + (JSON.stringify(doc)) if debugThis
       # insert and send invite:
       companyId = Companies.insert doc
-
-      #if a branch inviting a producer . Check if the producer should be linked to its particpants/branches
-      #if BEPI inviting a producer and like to link to a branch , this should be handled by updateCompanyLinks 
-      if userCompany and type is "producer" and invitedBy is "branch" 
-         branchLinking = new AutomaticBranchLinking()
-         branchLinking.automaticLinking(userCompany._id,companyId,"link")
-
       if downstream
          company = Companies.findOne {"details.companyName":details.companyName}
          Companies.update userCompany._id,
@@ -152,8 +144,11 @@ Meteor.methods
    resendCompanyInvite: (companyId) ->
       check companyId, String
       company = Companies.findOne {_id:companyId}
+      #user = Meteor.users.findOne {_id:company.invitedBy.userId}
       user = Meteor.users.findOne this.userId
-      from =  "BEPI <#{replyAddress}>"
+      if Roles.userIsInRole Meteor.user(), ['bepi'] then from =  " BEPI <#{replyAddress}>"
+      else 
+         from = "#{user.profile.name} - #{from}"
       if Roles.userIsInRole Meteor.user(), ['bepi','producer','producerAdmin','supplier','supplierAdmin','participant','participantAdmin','branch','branchAdmin']
          invitedByRole = user.roles[0]
          if _.includes invitedByRole , "Admin" then invitedByRole = invitedByRole.split("Admin")[0]
@@ -217,10 +212,6 @@ Meteor.methods
          #change status in Dormant collections
          dormant = Dormants.update {DBID:company.details.DBID}, {$set:{BepiStatus:"active"}}
          console.log "invitation mail for the new company #{dormant.EntityName} is sent to  contact person #{company.details.contact.name}(#{company.details.contact.email})."
-         #if a branch invites a producer then this should be automaticall concceted to its participant
-         if invitedByCompany?.type is "branch" and  company.type is "producer"
-            branchLinking = new AutomaticBranchLinking()
-            branchLinking.automaticLinking(invitedByCompany._id,company._id,"link")
       return true
    rejectInvitation: (message,companyId)->
       check companyId, String
